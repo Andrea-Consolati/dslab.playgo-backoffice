@@ -12,7 +12,6 @@
     width: 100%;
   }
 
-
   .add{
       margin-left: 1%;
       top:-3px;
@@ -56,7 +55,6 @@
   width: 75%;
   height: 100%;
 }
-
 
 .title-right{
   width: 25%;
@@ -111,4 +109,132 @@
   margin-top: 10px;
   border: black solid 1px;
   padding: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+//EXPANSION PANEL STYLE
+div.panel { //posizione e dimensione pannello
+  max-width: 100%;
+  margin: auto;
+  margin-top: calc(5% - 0px);
+}
+
+details { //bordi e ombre del box
+  background:#fff;
+  font-size:16px;
+  border-bottom:1px solid #e0e0e0;
+  box-shadow:0 0 2px rgba(0,0,0,0.12),0 2px 4px rgba(0,0,0,0.24);
+  display:flex;
+}
+
+details div.content { //posizione del contenuto
+  padding:0px 24px 24px 24px;
+}
+
+summary {
+  cursor: pointer; //trasforma il cursore in manina
+  padding: 1% 24px; //padding di tutti gli elementi in summary
+  color:#212121; //colore triangolino
+  position: relative; //posizionamento di tutti gli elementi in summary
+  font-size: 15px;
+}
+
+summary:hover { //hover quando il pannello è ancora chiuso
+  background:#eeeeee;
+}
+
+details[open] summary:hover { //quando pannello = open elimina hover
+  background:none;
+}
+
+summary ul { //allineamento elementi del summary
+  padding-left: 0;
+  list-style: none;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+
+summary ul li { //distanziamento elementi del summary
+   flex: 1 100%;
+   flex-flow: row wrap;
+}
+
+summary::after { //fraccia alto-basso e altro (da capire bene)
+  font-size: 1.5em;
+  padding: 0;
+  text-align: center;
+  margin-top: 0;
+  position: absolute;
+  top: calc(50% - 12px);
+  bottom: 0;
+  right: 0;
+  width: 6%;
+}  
+
+.titleValue { //stile elementi titleValue
+  color: #757575;
+}
+
+time { //stile elementi time
+  color: #757575; opacity: .75;
+}
+
+
+
+
+//STILE BOTTONI ANGULAR MATERIAL TEST
+.example-button-row {
+  display: table-cell;
+  max-width: 600px;
+}
+
+
+
+//GESTIONE POSIZIONE ELEMENTI NELLA PAGINA
+//STILE TUTTO
+.tutto {
+  display: flex;
+  align-items: flex-start;
+}
+
+//STILE COLONNA SINISTRA
+.left-column {
+  width: 40%;
+  display: inline-block;
+  flex-grow: 40%;
+}
+
+//STILE TABELLA
+.example-container {
+  height: 400px;
+  overflow: auto;
+  width: 100%;
+  display: inline-block;
+}
+
+//STILE EDIT
+.edit-panel {
+  width: 60%;
+  display: inline-block;
+  flex-grow: 60%;
+  align-self: flex-start;
+}
+
+
+
+
+
+
+.mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
 }

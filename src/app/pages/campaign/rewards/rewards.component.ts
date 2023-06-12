@@ -1,10 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
@@ -12,22 +7,27 @@ import { TranslateService } from "@ngx-translate/core";
 import { CampaignControllerService } from "src/app/core/api/generated/controllers/campaignController.service";
 import { CampaignClass } from "src/app/shared/classes/campaing-class";
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
+import {MatExpansionModule} from '@angular/material/expansion';
+
 @Component({
   selector: "app-rewards",
   templateUrl: "./rewards.component.html",
   styleUrls: ["./rewards.component.scss"],
+  standalone: true,
+  imports: [MatExpansionModule],
 })
+
 export class RewardsComponent implements OnInit {
   selectedLang: string;
   campaign: CampaignClass;
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ["index", "dateFrom", "dateTo", "prizes"];
+  displayedColumns: string[] = ["index-dates"];
   newItem: any;
   msgError: string;
   validatingForm: FormGroup;
   weekCsv: any;
   rewardCsv: any;
-
+  
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
     private formBuilder: FormBuilder,
@@ -219,4 +219,26 @@ export class RewardsComponent implements OnInit {
   parseError(item: string): boolean {
     return item.includes('error');
   }
+
+  viewEditPeriod: boolean = false;
+  viewEditPrizes: boolean = false;
+  viewLoadCSV: boolean = false;
+
+  goEditPeriod(): void {
+    this.viewEditPeriod=true;
+    this.viewEditPrizes=false;
+  }
+
+  goEditPrizes(): void {
+    this.viewEditPeriod=false;
+    this.viewEditPrizes=true;
+  }
+
+  switchLoadCSV(): void {
+    this.viewLoadCSV = !this.viewLoadCSV;
+  }
+
+  panelOpenState = false;
+
+
 }
