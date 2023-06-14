@@ -4,17 +4,16 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import { TranslateService } from "@ngx-translate/core";
+import { DateTime } from "luxon";
 import { CampaignControllerService } from "src/app/core/api/generated/controllers/campaignController.service";
 import { CampaignClass } from "src/app/shared/classes/campaing-class";
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
-import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: "app-rewards",
   templateUrl: "./rewards.component.html",
   styleUrls: ["./rewards.component.scss"],
-  standalone: true,
-  imports: [MatExpansionModule],
+  
 })
 
 export class RewardsComponent implements OnInit {
@@ -27,7 +26,10 @@ export class RewardsComponent implements OnInit {
   validatingForm: FormGroup;
   weekCsv: any;
   rewardCsv: any;
-  
+  territorySelected: any;
+  i: any;
+  l = 1;
+
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
     private formBuilder: FormBuilder,
@@ -222,23 +224,93 @@ export class RewardsComponent implements OnInit {
 
   viewEditPeriod: boolean = false;
   viewEditPrizes: boolean = false;
+  viewNewPeriod: boolean = true;
+  viewNewPrize: boolean = false;
   viewLoadCSV: boolean = false;
+  date_from: string;
+  date_to: string;
+  prize_desc: string;
+  nickname: string;
+  sponsor_name: string;
+  sponsor_desc: string;
+  sponsor_website: string;
+  reward_note: string;
 
-  goEditPeriod(): void {
+  goEditPeriod(oggetto): void {
     this.viewEditPeriod=true;
     this.viewEditPrizes=false;
+    this.viewNewPeriod=false;
+    this.viewNewPrize=false;
+    this.date_from = this.createDate(oggetto.dateFrom);
+    this.date_to = this.createDate(oggetto.dateTo);
   }
 
-  goEditPrizes(): void {
+  goEditPrizes(oggetto): void {
     this.viewEditPeriod=false;
     this.viewEditPrizes=true;
+    this.viewNewPeriod=false;
+    this.viewNewPrize=false;
+    this.prize_desc = oggetto.desc[this.selectedLang];
+    this.nickname = oggetto.winner[this.selectedLang];
+    this.sponsor_name = oggetto.sponsor[this.selectedLang];
+    this.sponsor_desc = oggetto.sponsorDesc[this.selectedLang];
+    this.sponsor_website = oggetto.sponsorWebsite[this.selectedLang];
+    this.reward_note = oggetto.rewardNote[this.selectedLang];
+    
+  }
+
+  goNewPeriod(): void {
+    this.viewEditPeriod=false;
+    this.viewEditPrizes=false;
+    this.viewNewPeriod=true;
+    this.viewNewPrize=false;
+  }
+
+  goNewPrize(): void {
+    this.viewEditPeriod=false;
+    this.viewEditPrizes=false;
+    this.viewNewPeriod=false;
+    this.viewNewPrize=true;
   }
 
   switchLoadCSV(): void {
     this.viewLoadCSV = !this.viewLoadCSV;
   }
 
-  panelOpenState = false;
+  get descriptionRichControl() {
+    const name = "description" + this.selectedLang;
+    return this.validatingForm.controls[name] as FormControl;
+  }
 
+  fromDateTimeToLong(dateString: string): number {
+    //yyyy-mm-ddThh:mm:ss format date
+    if (dateString.length === "yyyy-mm-ddThh:mm:ss".length) {
+      const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm:ss", {
+        zone: this.territorySelected.timezone,
+      });
+      return newDate.toMillis();
+    } else {
+      const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm", {
+        zone: this.territorySelected.timezone,
+      });
+      return newDate.toMillis();
+    }
+  }
 
+  createDate(timestamp: number): string {
+    const date = DateTime.fromMillis(timestamp);
+    return date.toFormat("yyyy-MM-dd'T'HH:mm:ss");
+  }
+
+  svuotaNickname() {
+    this.nickname = null;
+  }
+
+  selezionaLinguaItaliana() {
+    this.selectedLang = "it";
+  }
+
+  selezionaLinguaInglese() {
+    this.selectedLang = "en";
+  }
 }

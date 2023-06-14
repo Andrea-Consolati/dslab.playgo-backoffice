@@ -1,18 +1,21 @@
+<!-- HEADER BAR -->
 <div class="header-bar-stick">
     <mat-grid-list cols="8" rowHeight="45px">
-        <mat-grid-tile [colspan]="7" [rowspan]="1">
-            <h1 class="full-width">{{ 'weeklyPrizes'| translate}}</h1>
+        <mat-grid-tile [colspan]="6" [rowspan]="2">
+            <h1 class="full-width">{{'weeklyPrizes'| translate}}</h1>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <button mat-raised-button color="primary" (click)="switchLoadCSV()">
-                Importa CSV
+        <mat-grid-tile [colspan]="2" [rowspan]="2">
+            <button mat-raised-button class="all-button" color="primary" (click)="switchLoadCSV()">
+                {{'importCSV' | translate}}
             </button>
-            <button mat-raised-button class="grey-background" (click)="onNoClick($event)">
-                {{'close'|translate}}
+            <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="onNoClick($event)">
+                {{'close' | translate}}
             </button>
         </mat-grid-tile>
     </mat-grid-list>
 </div>
+<!-- END HEADER BAR -->
+
 
 <!-- LOAD CSV -->
 <form *ngIf="viewLoadCSV" [formGroup]="validatingForm" class="norm-border">
@@ -59,15 +62,15 @@
                 </mat-form-field>
             </div>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="7" [rowspan]="1">
+        <mat-grid-tile [colspan]="6" [rowspan]="2">
             <p *ngIf="msgError" class="error">{{msgError}}</p>
         </mat-grid-tile>
-        <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <button mat-raised-button color="primary" (click)="addPrizes()">
+        <mat-grid-tile [colspan]="2" [rowspan]="2">
+            <button mat-raised-button class="all-button" color="primary" (click)="addPrizes()">
                 <mat-icon>save</mat-icon>
                 {{'save' | translate}}
             </button>
-            <button mat-raised-button class="grey-background" (click)="switchLoadCSV()">
+            <button mat-raised-button  class="all-button" style="background-color: lightgray;" (click)="switchLoadCSV()">
                 {{'close' | translate}}
             </button>
         </mat-grid-tile>
@@ -78,30 +81,36 @@
 <div class="tutto">
 <!-- TABLE -->
 <form class="left-column">
-    <h2>Lista periodi e premi</h2>
-<form class="example-container">
+    <h2>{{'periodPrizeList' | translate}}</h2>
+<form class="table-panel">
 <table class="full-width" mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="index-dates">
-        <th mat-header-cell *matHeaderCellDef>
+    <ng-container matColumnDef="index-dates" >
+        <th *matHeaderCellDef>
         </th>
         <td mat-cell *matCellDef="let element" class="bold">
             <div class="panel">
                 <details>
                     <summary>
                         <ul>
-                            <li class="titleValue"><time>Id:</time> {{element.weekNumber}}</li>
-                            <li class="titleValue"><time>Start Date:</time> {{fromTimestampToDate(element.dateFrom)}} </li>
-                            <li class="titleValue"><time>End Date:</time> {{fromTimestampToDate(element.dateTo)}} </li>
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPeriod()">
+                            <li class="titleValue"><time>{{'id' | translate}}:</time> {{element.weekNumber}}</li>
+                            <li class="titleValue"><time>{{'dateFrom' | translate}}:</time> {{fromTimestampToDate(element.dateFrom)}} </li>
+                            <li class="titleValue"><time>{{'dateTo' | translate}}:</time> {{fromTimestampToDate(element.dateTo)}} </li>
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPeriod(element)">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </ul>
                     </summary>
                     <div class="content">
-                        <p (click)="goEditPrizes()" *ngFor="let item of element.rewards;let i =index">
+                        <p *ngFor="let item of element.rewards;let i =index">
                             {{i+1}}°: {{item.desc[selectedLang]}}
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPrizes()">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPrizes(item)">
                                 <mat-icon>edit</mat-icon>
+                            </button>
+                        </p>
+                        <p>
+                            {{'newPrize' | translate}}
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goNewPrize()">
+                                <mat-icon>add</mat-icon>
                             </button>
                         </p>
                     </div>
@@ -114,75 +123,203 @@
         *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 </form>
-<button mat-raised-button color="primary">+ Nuovo premio</button>
-<button mat-raised-button class="grey-background">+ Premi finali</button>
+<mat-grid-list cols="1" rowHeight="45px">
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <button mat-raised-button class="all-button" color="primary" (click)="goNewPeriod()">+ {{'newPeriod' | translate}}</button>
+        <button mat-raised-button class="all-button" style="background-color: lightgray;">+ {{'finalPrize' | translate}}</button>
+    </mat-grid-tile>
+</mat-grid-list>
 </form>
 <!-- END TABLE -->
 
 
 
 <!-- EDIT PERIOD SYSTEM -->
-<form class="edit-panel" *ngIf="viewEditPeriod">
-        <h2>Edit periodo</h2>
-        <form>
-            <label for="date-from"></label>
-            <input type = "text" id="date-from" placeholder="Data inizio (obbligatorio)" required>
-            <label for="date-to"> </label>
-            <input style= "margin-left: 5%;" type = "text" id="date-to" placeholder="Data fine (obbligatorio)" required>
+    <form class="right-column" *ngIf="viewEditPeriod">
+        <mat-grid-list cols="8" rowHeight="45px">
+            <mat-grid-tile [colspan]="7" [rowspan]="1">
+                <h2 class="full-width">{{'editPeriod' | translate}}</h2>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+                |
+                <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+            </mat-grid-tile>
+        </mat-grid-list>
+        <form class="edit-panel">
+            <div class="in-line-forms">
+                <mat-form-field appearance="fill" class="input-half-left">
+                    <mat-label>{{'dateFrom' | translate}}</mat-label>
+                    <input matInput id="dateFrom" formControlName="dateFrom" type="datetime-local" value="{{ date_from }}">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="input-half-right">
+                    <mat-label>{{'dateTo' | translate}}</mat-label>
+                    <input matInput id="dateTo" formControlName="dateTo" type="datetime-local" value="{{ date_to }}">
+                </mat-form-field>
+            </div>
+            <h3>{{'newPeriod' | translate}}</h3>
+            <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
         </form>
-        <div class="example-button-row">
-            <button mat-raised-button color="primary">Salva periodo</button>
-            <button mat-raised-button class="grey-background">Annulla</button>
-            <button mat-raised-button color="warn">Elimina periodo</button>
+        <div>
+            <mat-grid-list cols="1" rowHeight="45px">
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" style="background-color: lightgrey;">{{'cancel' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn">{{'deletePeriod' | translate}}</button>
+                </mat-grid-tile>
+            </mat-grid-list>
         </div>
-</form>
+    </form>
 <!-- END EDIT PERIOD SYSTEM -->
 
 
+<!-- NEW PERIOD SYSTEM -->
+<form class="right-column" *ngIf="viewNewPeriod">
+    <mat-grid-list cols="8" rowHeight="45px">
+        <mat-grid-tile [colspan]="7" [rowspan]="1">
+            <h2 class="full-width">{{'newPeriod' | translate}}</h2>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            |
+            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+        </mat-grid-tile>
+    </mat-grid-list>
+    <form class="edit-panel">
+        <div class="in-line-forms">
+            <mat-form-field appearance="fill" class="input-half-left">
+                <mat-label>{{'dateFrom' | translate}}</mat-label>
+                <input matInput id="dateFrom" formControlName="dateFrom" type="datetime-local">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="input-half-right">
+                <mat-label>{{'dateTo' | translate}}</mat-label>
+                <input matInput id="dateTo" formControlName="dateTo" type="datetime-local">
+            </mat-form-field>
+        </div>
+        <h3>{{'newPeriod' | translate}}</h3>
+        <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+    </form>
+    <div>
+        <mat-grid-list cols="1" rowHeight="45px">
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
+                <button mat-raised-button class="all-button" style="background-color: lightgrey;">{{'cancel' | translate}}</button>
+                <button mat-raised-button class="all-button" color="warn">{{'deletePeriod' | translate}}</button>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</form>
+<!-- END NEW PERIOD SYSTEM -->
+
 
 <!-- EDIT PRIZES SYSTEM -->
-<form class="edit-panel" *ngIf="viewEditPrizes">
-        <h2>Edit premio</h2>
-        <form>
-            <label for="prize-denomination"></label>
-            <input class="full-width" type = "text" id="prize-denomination" placeholder="Denominazione premio">
+<form class="right-column" *ngIf="viewEditPrizes">
+    <mat-grid-list cols="8" rowHeight="45px">
+        <mat-grid-tile [colspan]="7" [rowspan]="1">
+            <h2 class="full-width">{{'editPrize' | translate}}</h2>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            |
+            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+        </mat-grid-tile>
+    </mat-grid-list>
+        <form class="edit-panel">
+            <mat-form-field appearance="fill" class="input-full">
+                <mat-label>{{'prizeDenomination' | translate}}</mat-label>
+                <input matInput id="prize-denomination" formControlName="prize-denomination" value="{{prize_desc}}">
+            </mat-form-field>
             <br>
-            <label for="prize assignment">Assegnato a:</label>
-            <input type = "text" id="prize assignment" placeholder="Digita nickname o ID">
+            <label>{{'assignedTo' | translate}}:</label>
+            <mat-form-field appearance="fill" class="input-half-right">
+                <mat-icon matSuffix style="cursor: pointer" (click)="svuotaNickname()">close</mat-icon>
+                <mat-label>{{ 'Nickname / ID' }}</mat-label>
+                <input matInput id="prize-assignment" formControlName="prize-assignment" value="{{nickname}}">
+            </mat-form-field>
             <br>
-            <h3> {{ 'Sponsor' }} </h3>
-            <label for="sponsor-name"></label>
-            <input class="full-width" type = "text" id="sponsor-name" placeholder="Denominazione sponsor">
+            <h3> {{'Sponsor' | translate}} </h3>
+            <mat-form-field appearance="fill" class="input-full">
+                <mat-label>{{'sponsorName' | translate}}</mat-label>
+                <input matInput id="sponsor-name" formControlName="sponsor-name" value="{{sponsor_name}}">
+            </mat-form-field>
             <br>
-            <label for="sponsor-description"></label>
-            <input class="full-width" type = "text" id="sponsor-description" placeholder="Descrizione sponsor">
+            <mat-form-field appearance="fill" class="input-full">
+                <mat-label>{{'sponsorDescription' | translate}}</mat-label>
+                <input matInput id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsor_desc}}">
+            </mat-form-field>
             <br>
-            <label for="sponsor-website"></label>
-            <input class="full-width" type = "text" id="sponsor-website" placeholder="Sito web sponsor">
+            <mat-form-field appearance="fill" class="input-full">
+                <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
+                <input matInput id="sponsor-website" formControlName="sponsor-website" value="{{sponsor_website}}">
+            </mat-form-field>
+            <h3>{{'prizeNote' | translate}}</h3>
+            <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
         </form>
-        <div class="example-button-row">
-            <button mat-raised-button color="primary">Salva premio</button>
-            <button mat-raised-button color="primary">Sposta</button>
-            <button mat-raised-button class="grey-background">Annulla</button>
-            <button mat-raised-button color="warn">Elimina premio</button>
+        <div>
+            <mat-grid-list cols="1" rowHeight="45px">
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
+                    <button mat-raised-button class="all-button" style="background-color: lightgray;">{{'cancel' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn">{{'deletePrize' | translate}}</button>
+                </mat-grid-tile>
+            </mat-grid-list>
         </div>       
 </form>
 <!-- END EDIT PRIZES SYSTEM -->
+
+
+<!-- NEW PRIZE SYSTEM -->
+<form class="right-column" *ngIf="viewNewPrize">
+    <mat-grid-list cols="8" rowHeight="45px">
+        <mat-grid-tile [colspan]="7" [rowspan]="1">
+            <h2 class="full-width">{{'newPrize' | translate}}</h2>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            |
+            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+        </mat-grid-tile>
+    </mat-grid-list>
+    <form class="edit-panel">
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{'prizeDenomination' | translate}}</mat-label>
+            <input matInput id="prize-denomination" formControlName="prize-denomination">
+        </mat-form-field>
+        <br>
+        <label>{{'assignedTo' | translate}}:</label>
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{ 'Nickname / ID' }}</mat-label>
+            <input matInput id="prize-assignment" formControlName="prize-assignment">
+        </mat-form-field>
+        <br>
+        <h3> {{'Sponsor' | translate}} </h3>
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{'sponsorName' | translate}}</mat-label>
+            <input matInput id="sponsor-name" formControlName="sponsor-name">
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{'sponsorDescription' | translate}}</mat-label>
+            <input matInput id="sponsor-description" formControlName="sponsor-descriptione">
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
+            <input matInput id="sponsor-website" formControlName="sponsor-website">
+        </mat-form-field>
+        <h3>{{'prizeNote' | translate}}</h3>
+        <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+    </form>
+    <div class="example-button-row">
+        <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
+        <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
+        <button mat-raised-button class="all-button" style="background-color: lightgray">{{'cancel' | translate}}</button>
+        <button mat-raised-button class="all-button" color="warn">{{'deletePrize' | translate}}</button>
+    </div>       
+</form>
+<!-- END NEW PRIZE SYSTEM -->
 </div>
 
 
 <!-- IN PROGRESS -->
-<mat-accordion>
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                         (closed)="panelOpenState = false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Self aware panel
-        </mat-panel-title>
-        <mat-panel-description>
-          Currently I am {{panelOpenState ? 'open' : 'closed'}}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <p>I'm visible because I am open</p>
-    </mat-expansion-panel>
-  </mat-accordion>
