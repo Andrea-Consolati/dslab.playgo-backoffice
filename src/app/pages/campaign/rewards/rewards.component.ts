@@ -226,6 +226,7 @@ export class RewardsComponent implements OnInit {
   viewEditPrizes: boolean = false;
   viewNewPeriod: boolean = true;
   viewNewPrize: boolean = false;
+  viewFinalPrizes: boolean = false;
   viewLoadCSV: boolean = false;
   date_from: string;
   date_to: string;
@@ -235,21 +236,47 @@ export class RewardsComponent implements OnInit {
   sponsor_desc: string;
   sponsor_website: string;
   reward_note: string;
+  isFinalPrizes: boolean = false;
+  isSponsor: boolean = false;
+  sponsorNomeProva: string = '';
 
-  goEditPeriod(oggetto): void {
+  controllaSponsor() {
+    if (this.sponsorNomeProva.length > 0) {
+      this.isSponsor = true;
+    } else {
+      this.isSponsor = false;
+    }
+  this.switchLoadCSV()
+  }
+
+  switchIsFinalPrizes() {
+    this.isFinalPrizes = !this.isFinalPrizes
+  }
+
+  goFinalPrizes() {
+    this.viewFinalPrizes = true;
+    this.viewEditPeriod=false;
+    this.viewEditPrizes=false;
+    this.viewNewPeriod=false;
+    this.viewNewPrize=false;
+  }
+
+  goEditPeriod(oggetto) {
     this.viewEditPeriod=true;
     this.viewEditPrizes=false;
     this.viewNewPeriod=false;
     this.viewNewPrize=false;
+    this.viewFinalPrizes = false;
     this.date_from = this.createDate(oggetto.dateFrom);
     this.date_to = this.createDate(oggetto.dateTo);
   }
 
-  goEditPrizes(oggetto): void {
+  goEditPrizes(oggetto) {
     this.viewEditPeriod=false;
     this.viewEditPrizes=true;
     this.viewNewPeriod=false;
     this.viewNewPrize=false;
+    this.viewFinalPrizes = false;
     this.prize_desc = oggetto.desc[this.selectedLang];
     this.nickname = oggetto.winner[this.selectedLang];
     this.sponsor_name = oggetto.sponsor[this.selectedLang];
@@ -259,21 +286,23 @@ export class RewardsComponent implements OnInit {
     
   }
 
-  goNewPeriod(): void {
+  goNewPeriod() {
     this.viewEditPeriod=false;
     this.viewEditPrizes=false;
     this.viewNewPeriod=true;
     this.viewNewPrize=false;
+    this.viewFinalPrizes = false;
   }
 
-  goNewPrize(): void {
+  goNewPrize() {
     this.viewEditPeriod=false;
     this.viewEditPrizes=false;
     this.viewNewPeriod=false;
     this.viewNewPrize=true;
+    this.viewFinalPrizes = false;
   }
 
-  switchLoadCSV(): void {
+  switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;
   }
 
