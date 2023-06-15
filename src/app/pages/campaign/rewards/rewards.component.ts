@@ -48,7 +48,6 @@ export class RewardsComponent implements OnInit {
   indiceTmp: number;
   premioDiProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: {"it": "sponsor"}, sponsorWebsite: {"it": "sito web sponsor"}, winner: {"it": "vincitore"} };
   arrayRewards: Array<CampaignReward> = [this.premioDiProva];
-  periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: 1 };
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -320,6 +319,7 @@ export class RewardsComponent implements OnInit {
 
   deletePeriod() {
     this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
   }
 
   addPrize() {
@@ -331,7 +331,9 @@ export class RewardsComponent implements OnInit {
   }
   
   addPeriod() {
-    this.campaign.weekConfs.push(this.periodoDiProva);
+    var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: this.campaign.weekConfs.length };
+    this.campaign.weekConfs.push(periodoDiProva);
+    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
   }
 
   switchLoadCSV() {
