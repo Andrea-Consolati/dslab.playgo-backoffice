@@ -118,7 +118,7 @@
                         </p>
                         <p>
                             {{'newPrize' | translate}}
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goNewPrize()">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goNewPrize(element.weekNumber)">
                                 <mat-icon>add</mat-icon>
                             </button>
                         </p>
@@ -167,7 +167,10 @@
                 </mat-form-field>
             </div>
             <h3>{{'periodNote' | translate}}</h3>
-            <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+            <mat-form-field appearance="fill" class="input-full">
+                <mat-label>{{'periodNote' | translate}}</mat-label>
+                <input matInput id="prize-description" formControlName="prize-description">
+            </mat-form-field>
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
@@ -206,12 +209,15 @@
             </mat-form-field>
         </div>
         <h3>{{'periodNote' | translate}}</h3>
-        <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+        <mat-form-field appearance="fill" class="input-full">
+            <mat-label>{{'periodNote' | translate}}</mat-label>
+            <input matInput id="prize-description" formControlName="prize-description">
+        </mat-form-field>
     </form>
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" (click)="addPeriod()">{{'savePeriod' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
@@ -234,7 +240,10 @@
     </mat-grid-list>
     <form class="edit-panel">
         <h3>{{'finalPrizesNote' | translate}}</h3>
-        <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+        <mat-form-field appearance="fill" class="input-full">
+            <mat-label>{{'finalPrizesNote' | translate}}</mat-label>
+            <input matInput id="prize-description" formControlName="prize-description">
+        </mat-form-field>
     </form>
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
@@ -290,7 +299,10 @@
                 <input matInput [disabled]="!isSponsor" id="sponsor-website" formControlName="sponsor-website" value="{{sponsor_website}}">
             </mat-form-field>
             <h3>{{'prizeNote' | translate}}</h3>
-            <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+            <mat-form-field appearance="fill" class="input-full">
+                <mat-label>{{'prizeNote' | translate}}</mat-label>
+                <input matInput id="prize-description" formControlName="prize-description">
+            </mat-form-field>
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
@@ -346,10 +358,13 @@
             <input matInput [disabled]="!isSponsor" id="sponsor-website" formControlName="sponsor-website">
         </mat-form-field>
         <h3>{{'prizeNote' | translate}}</h3>
-        <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
+        <mat-form-field appearance="fill" class="input-full">
+            <mat-label>{{'prizeNote' | translate}}</mat-label>
+            <input matInput id="prize-description" formControlName="prize-description">
+        </mat-form-field>
     </form>
     <div>
-        <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="addPrize()">{{'savePrize' | translate}}</button>
         <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
         <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
     </div>       
@@ -359,4 +374,3 @@
 
 
 <!-- IN PROGRESS -->
-<button (click)="switchIsFinalPrizes()">Premimi</button>

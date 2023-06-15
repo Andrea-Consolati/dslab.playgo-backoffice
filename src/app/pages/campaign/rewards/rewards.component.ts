@@ -13,7 +13,6 @@ import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved
   selector: "app-rewards",
   templateUrl: "./rewards.component.html",
   styleUrls: ["./rewards.component.scss"],
-  
 })
 
 export class RewardsComponent implements OnInit {
@@ -50,7 +49,6 @@ export class RewardsComponent implements OnInit {
       .getCampaignUsingGET(this.campaign.campaignId)
       .subscribe((result) => {
         this.campaign = result;
-        //this.checkWeek0();
         this.setTableData();
       });
   }
@@ -180,7 +178,6 @@ export class RewardsComponent implements OnInit {
       "Dec",
     ];
     var year = a.getFullYear();
-    //var month = months[a.getMonth()+1];
     var month = a.getMonth() + 1;
     var date = a.getDate();
     var hour = a.getHours();
@@ -199,12 +196,12 @@ export class RewardsComponent implements OnInit {
       link.setAttribute(
         "download",
         this.translate.instant("prizes_example.csv")
-      ); //'esempio_premi.csv'
+      );
     } else {
       link.setAttribute(
         "download",
         this.translate.instant("weeks_example.csv")
-      ); // 'esempio_settimane.csv'
+      );
     }
     document.body.appendChild(link);
     link.click();
@@ -240,18 +237,12 @@ export class RewardsComponent implements OnInit {
   sponsor_desc: string;
   sponsor_website: string;
   reward_note: string;
-  isFinalPrizes: boolean = false;
   isSponsor: boolean = false;
+  weekNumberTmp;
+  indiceTmp;
 
   checkSponsor(sponsorName:string){
     return false;
-  }
-  switchIsFinalPrizes() {
-    if (this.isFinalPrizes == true) {
-      this.isFinalPrizes = false;
-    } else {
-      this.isFinalPrizes = true;
-    }
   }
 
   goFinalPrizes() {
@@ -289,17 +280,6 @@ export class RewardsComponent implements OnInit {
     this.weekNumberTmp = weekNumber;
   }
 
-  weekNumberTmp;
-  indiceTmp;
-
-  deletePrize() {
-    this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
-  }
-
-  deletePeriod() {
-    this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
-  }
-
   goNewPeriod() {
     this.viewEditPeriod=false;
     this.viewEditPrizes=false;
@@ -308,13 +288,30 @@ export class RewardsComponent implements OnInit {
     this.viewFinalPrizes = false;
   }
 
-  goNewPrize() {
+  goNewPrize(weekNumber) {
     this.viewEditPeriod=false;
     this.viewEditPrizes=false;
     this.viewNewPeriod=false;
     this.viewNewPrize=true;
     this.viewFinalPrizes = false;
+    this.weekNumberTmp = weekNumber;
   }
+
+  deletePrize() {
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
+    } else {
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.splice(this.indiceTmp, 1);
+    }
+  }
+
+  deletePeriod() {
+    this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+  }
+
+  addPrize() {}
+  
+  addPeriod() {}
 
   switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;
