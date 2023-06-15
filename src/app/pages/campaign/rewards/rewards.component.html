@@ -90,11 +90,11 @@
         <td mat-cell *matCellDef="let element" class="bold">
             <div class="panel">
                 <details>
-                    <summary *ngIf="element.weekNumber == 0" style="background-color: #f0bc5498;" onload="switchIsFinalPrizes()">
+                    <summary *ngIf="element.weekNumber == 0" style="background-color: #f0bc5498;">
                         <ul>
                             <li class="titleValue"><time>{{'id' | translate}}:</time> {{element.weekNumber}}</li>
                             <li class="titleValue">{{'finalPrizes' | translate}}</li>
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goFinalPrizes()">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="goFinalPrizes()">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </ul>
@@ -104,15 +104,15 @@
                             <li class="titleValue"><time>{{'id' | translate}}:</time> {{element.weekNumber}}</li>
                             <li class="titleValue"><time>{{'dateFrom' | translate}}:</time> {{fromTimestampToDate(element.dateFrom)}} </li>
                             <li class="titleValue"><time>{{'dateTo' | translate}}:</time> {{fromTimestampToDate(element.dateTo)}} </li>
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPeriod(element)">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="goEditPeriod(element, element.weekNumber)">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </ul>
                     </summary>
                     <div class="content">
-                        <p *ngFor="let item of element.rewards;let i =index">
+                        <p *ngFor="let item of element.rewards;let i = index">
                             {{i+1}}°: {{item.desc[selectedLang]}}
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPrizes(item)">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPrizes(item, element.weekNumber, i)">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </p>
@@ -135,7 +135,7 @@
 <mat-grid-list cols="1" rowHeight="45px">
     <mat-grid-tile [colspan]="1" [rowspan]="1">
         <button mat-raised-button class="all-button" color="primary" (click)="goNewPeriod()">+ {{'newPeriod' | translate}}</button>
-        <button mat-raised-button [disabled]="!isFinalPrizes" class="all-button" style="background-color: lightgray;" (click)="goFinalPrizes()">+ {{'finalPrizes' | translate}}</button>
+        <button mat-raised-button [disabled]="checkWeek0()" class="all-button" style="background-color: lightgray;" (click)="goFinalPrizes()">+ {{'finalPrizes' | translate}}</button>
     </mat-grid-tile>
 </mat-grid-list>
 </form>
@@ -174,7 +174,7 @@
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
                     <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="warn">{{'deletePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn" (click)="deletePeriod()">{{'deletePeriod' | translate}}</button>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>
@@ -213,7 +213,6 @@
             <mat-grid-tile [colspan]="1" [rowspan]="1">
                 <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                <button mat-raised-button class="all-button" color="warn">{{'deletePeriod' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
@@ -278,12 +277,12 @@
             <h3> {{'Sponsor' | translate}} </h3>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorName' | translate}}</mat-label>
-                <input matInput id="sponsor-name" formControlName="sponsor-name" value="{{sponsor_name}}">
+                <input matInput id="sponsor-name" formControlName="sponsor-name" value="{{sponsor_name}}" >
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorDescription' | translate}}</mat-label>
-                <input matInput [disabled]="!isSponsor" id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsor_desc}}">
+                <input matInput [disabled]="checkSponsor(sponsor_name)" id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsor_desc}}">
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
@@ -299,7 +298,7 @@
                     <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
                     <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="warn">{{'deletePrize' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn" (click)="deletePrize()">{{'deletePrize' | translate}}</button>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>       
@@ -349,11 +348,10 @@
         <h3>{{'prizeNote' | translate}}</h3>
         <rich-text-editor [control]="descriptionRichControl"></rich-text-editor>
     </form>
-    <div class="example-button-row">
+    <div>
         <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
         <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
         <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-        <button mat-raised-button class="all-button" color="warn">{{'deletePrize' | translate}}</button>
     </div>       
 </form>
 <!-- END NEW PRIZE SYSTEM -->
@@ -361,3 +359,4 @@
 
 
 <!-- IN PROGRESS -->
+<button (click)="switchIsFinalPrizes()">Premimi</button>

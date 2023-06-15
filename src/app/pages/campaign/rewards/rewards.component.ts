@@ -50,8 +50,12 @@ export class RewardsComponent implements OnInit {
       .getCampaignUsingGET(this.campaign.campaignId)
       .subscribe((result) => {
         this.campaign = result;
+        //this.checkWeek0();
         this.setTableData();
       });
+  }
+  checkWeek0() {
+     return this.campaign?.weekConfs?.some(week => week.weekNumber===0);
   }
 
   onNoClick(event: any): void {
@@ -238,19 +242,16 @@ export class RewardsComponent implements OnInit {
   reward_note: string;
   isFinalPrizes: boolean = false;
   isSponsor: boolean = false;
-  sponsorNomeProva: string = '';
 
-  controllaSponsor() {
-    if (this.sponsorNomeProva.length > 0) {
-      this.isSponsor = true;
-    } else {
-      this.isSponsor = false;
-    }
-  this.switchLoadCSV()
+  checkSponsor(sponsorName:string){
+    return false;
   }
-
   switchIsFinalPrizes() {
-    this.isFinalPrizes = !this.isFinalPrizes
+    if (this.isFinalPrizes == true) {
+      this.isFinalPrizes = false;
+    } else {
+      this.isFinalPrizes = true;
+    }
   }
 
   goFinalPrizes() {
@@ -261,7 +262,7 @@ export class RewardsComponent implements OnInit {
     this.viewNewPrize=false;
   }
 
-  goEditPeriod(oggetto) {
+  goEditPeriod(oggetto, weekNumber) {
     this.viewEditPeriod=true;
     this.viewEditPrizes=false;
     this.viewNewPeriod=false;
@@ -269,9 +270,10 @@ export class RewardsComponent implements OnInit {
     this.viewFinalPrizes = false;
     this.date_from = this.createDate(oggetto.dateFrom);
     this.date_to = this.createDate(oggetto.dateTo);
+    this.weekNumberTmp = weekNumber;
   }
 
-  goEditPrizes(oggetto) {
+  goEditPrizes(oggetto, weekNumber, indice) {
     this.viewEditPeriod=false;
     this.viewEditPrizes=true;
     this.viewNewPeriod=false;
@@ -283,7 +285,19 @@ export class RewardsComponent implements OnInit {
     this.sponsor_desc = oggetto.sponsorDesc[this.selectedLang];
     this.sponsor_website = oggetto.sponsorWebsite[this.selectedLang];
     this.reward_note = oggetto.rewardNote[this.selectedLang];
-    
+    this.indiceTmp = indice;
+    this.weekNumberTmp = weekNumber;
+  }
+
+  weekNumberTmp;
+  indiceTmp;
+
+  deletePrize() {
+    this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
+  }
+
+  deletePeriod() {
+    this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
   }
 
   goNewPeriod() {
