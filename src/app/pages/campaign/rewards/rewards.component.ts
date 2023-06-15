@@ -1,4 +1,3 @@
-import { Reward } from './../../../core/api/generated/model/reward';
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
@@ -8,6 +7,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { DateTime } from "luxon";
 import { CampaignControllerService } from "src/app/core/api/generated/controllers/campaignController.service";
 import { CampaignReward } from "src/app/core/api/generated/model/campaignReward";
+import { CampaignWeekConf } from "src/app/core/api/generated/model/campaignWeekConf";
 import { CampaignClass } from "src/app/shared/classes/campaing-class";
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
 
@@ -30,6 +30,25 @@ export class RewardsComponent implements OnInit {
   territorySelected: any;
   i: any;
   l = 1;
+  viewEditPeriod: boolean = false;
+  viewEditPrizes: boolean = false;
+  viewNewPeriod: boolean = true;
+  viewNewPrize: boolean = false;
+  viewFinalPrizes: boolean = false;
+  viewLoadCSV: boolean = false;
+  dateFrom: string;
+  dateTo: string;
+  prizeDesc: string;
+  nickname: string;
+  sponsorName: string;
+  sponsorDesc: string;
+  sponsorWebsite: string;
+  rewardNote: string;
+  weekNumberTmp: number;
+  indiceTmp: number;
+  premioDiProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: {"it": "sponsor"}, sponsorWebsite: {"it": "sito web sponsor"}, winner: {"it": "vincitore"} };
+  arrayRewards: Array<CampaignReward> = [this.premioDiProva];
+  periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: 1 };
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -53,9 +72,6 @@ export class RewardsComponent implements OnInit {
         this.campaign = result;
         this.setTableData();
       });
-  }
-  checkWeek0() {
-     return this.campaign?.weekConfs?.some(week => week.weekNumber===0);
   }
 
   onNoClick(event: any): void {
@@ -225,25 +241,20 @@ export class RewardsComponent implements OnInit {
     return item.includes('error');
   }
 
-  viewEditPeriod: boolean = false;
-  viewEditPrizes: boolean = false;
-  viewNewPeriod: boolean = true;
-  viewNewPrize: boolean = false;
-  viewFinalPrizes: boolean = false;
-  viewLoadCSV: boolean = false;
-  dateFrom: string;
-  dateTo: string;
-  prizeDesc: string;
-  nickname: string;
-  sponsorName: string;
-  sponsorDesc: string;
-  sponsorWebsite: string;
-  rewardNote: string;
-  isSponsor: boolean = false;
-  weekNumberTmp: number;
-  indiceTmp: number;
+  checkWeek0() {
+    return this.campaign?.weekConfs?.some(week => week.weekNumber===0);
+  }
 
-  checkSponsor(sponsorName:string){
+  checkSponsor(sponsorName: string, sponsorDesc: string, sponsorWebsite: string) {
+    if (!(sponsorName === undefined) && (sponsorName.length > 0)) {
+      return true;
+    }
+    if (!(sponsorDesc === undefined) && (sponsorDesc.length > 0)) {
+      return true;
+    }
+    if (!(sponsorWebsite === undefined) && (sponsorWebsite.length > 0)) {
+      return true;
+    }
     return false;
   }
 
@@ -313,27 +324,21 @@ export class RewardsComponent implements OnInit {
 
   addPrize() {
     if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoProva);
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.premioDiProva);
     } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoProva);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.premioDiProva);
     }
   }
   
-  addPeriod() {}
-
-  oggettoProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: {"it": "sponsor"}, sponsorWebsite: {"it": "sito web sponsor"}, winner: {"it": "vincitore"}, };
+  addPeriod() {
+    this.campaign.weekConfs.push(this.periodoDiProva);
+  }
 
   switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;
   }
 
-  get descriptionRichControl() {
-    const name = "description" + this.selectedLang;
-    return this.validatingForm.controls[name] as FormControl;
-  }
-
   fromDateTimeToLong(dateString: string): number {
-    //yyyy-mm-ddThh:mm:ss format date
     if (dateString.length === "yyyy-mm-ddThh:mm:ss".length) {
       const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm:ss", {
         zone: this.territorySelected.timezone,
@@ -350,10 +355,6 @@ export class RewardsComponent implements OnInit {
   createDate(timestamp: number): string {
     const date = DateTime.fromMillis(timestamp);
     return date.toFormat("yyyy-MM-dd'T'HH:mm:ss");
-  }
-
-  svuotaNickname() {
-    this.nickname = null;
   }
 
   selezionaLinguaItaliana() {

@@ -278,7 +278,7 @@
             <br>
             <label>{{'assignedTo' | translate}}:</label>
             <mat-form-field appearance="fill" class="input-half-right">
-                <mat-icon matSuffix style="cursor: pointer" (click)="svuotaNickname()">close</mat-icon>
+                <mat-icon matSuffix style="cursor: pointer">close</mat-icon>
                 <mat-label>{{ 'Nickname / ID' }}</mat-label>
                 <input matInput id="prize-assignment" formControlName="prize-assignment" value="{{nickname}}">
             </mat-form-field>
@@ -291,12 +291,12 @@
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorDescription' | translate}}</mat-label>
-                <input matInput [disabled]="checkSponsor(sponsorName)" id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsorDesc}}">
+                <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsorDesc}}">
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
-                <input matInput [disabled]="!isSponsor" id="sponsor-website" formControlName="sponsor-website" value="{{sponsorWebsite}}">
+                <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-website" formControlName="sponsor-website" value="{{sponsorWebsite}}">
             </mat-form-field>
             <h3>{{'prizeNote' | translate}}</h3>
             <mat-form-field appearance="fill" class="input-full">
@@ -350,12 +350,12 @@
         <br>
         <mat-form-field appearance="fill" class="input-full">
             <mat-label>{{'sponsorDescription' | translate}}</mat-label>
-            <input matInput [disabled]="!isSponsor" id="sponsor-description" formControlName="sponsor-descriptione">
+            <input matInput id="sponsor-description" formControlName="sponsor-descriptione">
         </mat-form-field>
         <br>
         <mat-form-field appearance="fill" class="input-full">
             <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
-            <input matInput [disabled]="!isSponsor" id="sponsor-website" formControlName="sponsor-website">
+            <input matInput id="sponsor-website" formControlName="sponsor-website">
         </mat-form-field>
         <h3>{{'prizeNote' | translate}}</h3>
         <mat-form-field appearance="fill" class="input-full">
