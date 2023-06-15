@@ -1,3 +1,4 @@
+import { Reward } from './../../../core/api/generated/model/reward';
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
@@ -6,6 +7,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { TranslateService } from "@ngx-translate/core";
 import { DateTime } from "luxon";
 import { CampaignControllerService } from "src/app/core/api/generated/controllers/campaignController.service";
+import { CampaignReward } from "src/app/core/api/generated/model/campaignReward";
 import { CampaignClass } from "src/app/shared/classes/campaing-class";
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
 
@@ -229,17 +231,17 @@ export class RewardsComponent implements OnInit {
   viewNewPrize: boolean = false;
   viewFinalPrizes: boolean = false;
   viewLoadCSV: boolean = false;
-  date_from: string;
-  date_to: string;
-  prize_desc: string;
+  dateFrom: string;
+  dateTo: string;
+  prizeDesc: string;
   nickname: string;
-  sponsor_name: string;
-  sponsor_desc: string;
-  sponsor_website: string;
-  reward_note: string;
+  sponsorName: string;
+  sponsorDesc: string;
+  sponsorWebsite: string;
+  rewardNote: string;
   isSponsor: boolean = false;
-  weekNumberTmp;
-  indiceTmp;
+  weekNumberTmp: number;
+  indiceTmp: number;
 
   checkSponsor(sponsorName:string){
     return false;
@@ -259,8 +261,8 @@ export class RewardsComponent implements OnInit {
     this.viewNewPeriod=false;
     this.viewNewPrize=false;
     this.viewFinalPrizes = false;
-    this.date_from = this.createDate(oggetto.dateFrom);
-    this.date_to = this.createDate(oggetto.dateTo);
+    this.dateFrom = this.createDate(oggetto.dateFrom);
+    this.dateTo = this.createDate(oggetto.dateTo);
     this.weekNumberTmp = weekNumber;
   }
 
@@ -270,12 +272,12 @@ export class RewardsComponent implements OnInit {
     this.viewNewPeriod=false;
     this.viewNewPrize=false;
     this.viewFinalPrizes = false;
-    this.prize_desc = oggetto.desc[this.selectedLang];
+    this.prizeDesc = oggetto.desc[this.selectedLang];
     this.nickname = oggetto.winner[this.selectedLang];
-    this.sponsor_name = oggetto.sponsor[this.selectedLang];
-    this.sponsor_desc = oggetto.sponsorDesc[this.selectedLang];
-    this.sponsor_website = oggetto.sponsorWebsite[this.selectedLang];
-    this.reward_note = oggetto.rewardNote[this.selectedLang];
+    this.sponsorName = oggetto.sponsor[this.selectedLang];
+    this.sponsorDesc = oggetto.sponsorDesc[this.selectedLang];
+    this.sponsorWebsite = oggetto.sponsorWebsite[this.selectedLang];
+    this.rewardNote = oggetto.rewardNote[this.selectedLang];
     this.indiceTmp = indice;
     this.weekNumberTmp = weekNumber;
   }
@@ -309,9 +311,17 @@ export class RewardsComponent implements OnInit {
     this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
   }
 
-  addPrize() {}
+  addPrize() {
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoProva);
+    } else {
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoProva);
+    }
+  }
   
   addPeriod() {}
+
+  oggettoProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: {"it": "sponsor"}, sponsorWebsite: {"it": "sito web sponsor"}, winner: {"it": "vincitore"}, };
 
   switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;

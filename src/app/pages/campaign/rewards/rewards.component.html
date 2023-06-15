@@ -159,11 +159,11 @@
             <div class="in-line-forms">
                 <mat-form-field appearance="fill" class="input-half-left">
                     <mat-label>{{'dateFrom' | translate}}</mat-label>
-                    <input matInput id="dateFrom" formControlName="dateFrom" type="datetime-local" value="{{ date_from }}" required>
+                    <input matInput id="dateFrom" formControlName="dateFrom" type="datetime-local" value="{{ dateFrom }}" required>
                 </mat-form-field>
                 <mat-form-field appearance="fill" class="input-half-right">
                     <mat-label>{{'dateTo' | translate}}</mat-label>
-                    <input matInput id="dateTo" formControlName="dateTo" type="datetime-local" value="{{ date_to }}" required>
+                    <input matInput id="dateTo" formControlName="dateTo" type="datetime-local" value="{{ dateTo }}" required>
                 </mat-form-field>
             </div>
             <h3>{{'periodNote' | translate}}</h3>
@@ -273,7 +273,7 @@
         <form class="edit-panel">
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'prizeDenomination' | translate}}</mat-label>
-                <input matInput id="prize-denomination" formControlName="prize-denomination" value="{{prize_desc}}" required>
+                <input matInput id="prize-denomination" formControlName="prize-denomination" value="{{prizeDesc}}" required>
             </mat-form-field>
             <br>
             <label>{{'assignedTo' | translate}}:</label>
@@ -286,17 +286,17 @@
             <h3> {{'Sponsor' | translate}} </h3>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorName' | translate}}</mat-label>
-                <input matInput id="sponsor-name" formControlName="sponsor-name" value="{{sponsor_name}}" >
+                <input matInput id="sponsor-name" formControlName="sponsor-name" value="{{sponsorName}}" >
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorDescription' | translate}}</mat-label>
-                <input matInput [disabled]="checkSponsor(sponsor_name)" id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsor_desc}}">
+                <input matInput [disabled]="checkSponsor(sponsorName)" id="sponsor-description" formControlName="sponsor-descriptione" value="{{sponsorDesc}}">
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
-                <input matInput [disabled]="!isSponsor" id="sponsor-website" formControlName="sponsor-website" value="{{sponsor_website}}">
+                <input matInput [disabled]="!isSponsor" id="sponsor-website" formControlName="sponsor-website" value="{{sponsorWebsite}}">
             </mat-form-field>
             <h3>{{'prizeNote' | translate}}</h3>
             <mat-form-field appearance="fill" class="input-full">
