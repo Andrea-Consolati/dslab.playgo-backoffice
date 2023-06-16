@@ -276,7 +276,7 @@
             <br>
             <label>{{'assignedTo' | translate}}:</label>
             <mat-form-field appearance="fill" class="input-half-right">
-                <mat-icon matSuffix style="cursor: pointer">close</mat-icon>
+                <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
                 <mat-label>{{ 'Nickname / ID' }}</mat-label>
                 <input matInput id="reward-assignment" name="editrewardField2" [(ngModel)]="nickname">
             </mat-form-field>
@@ -336,6 +336,7 @@
         <br>
         <label>{{'assignedTo' | translate}}:</label>
         <mat-form-field appearance="fill" class="input-half-right">
+            <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
             <mat-label>{{ 'Nickname / ID' }}</mat-label>
             <input matInput id="reward-assignment" name="newRewardField2" [(ngModel)]="nickname">
         </mat-form-field>

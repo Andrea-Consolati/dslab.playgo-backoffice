@@ -450,7 +450,7 @@ export class RewardsComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
   }
 
-  clearValue(): void {
+  clearValue() {
     this.rewardDesc = undefined;
     this.nickname = undefined;
     this.sponsorName = undefined;
@@ -461,5 +461,9 @@ export class RewardsComponent implements OnInit {
     this.finalRewardsNote = undefined;
     this.dateFrom = undefined;
     this.dateTo = undefined;
+  }
+
+  clearNickname() {
+    this.nickname = undefined;
   }
 }
