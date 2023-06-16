@@ -157,23 +157,23 @@
             <div class="in-line-forms">
                 <mat-form-field appearance="fill" class="input-half-left">
                     <mat-label>{{'dateFrom' | translate}}</mat-label>
-                    <input matInput id="dateFrom" type="datetime-local" value="{{ dateFrom }}" required>
+                    <input matInput id="dateFrom" type="datetime-local" name="editPeriodField1" [(ngModel)]="dateFrom" required>
                 </mat-form-field>
                 <mat-form-field appearance="fill" class="input-half-right">
                     <mat-label>{{'dateTo' | translate}}</mat-label>
-                    <input matInput id="dateTo" type="datetime-local" value="{{ dateTo }}" required>
+                    <input matInput id="dateTo" type="datetime-local" name="editPeriodField2" [(ngModel)]="dateTo" required>
                 </mat-form-field>
             </div>
             <h3>{{'periodNote' | translate}}</h3>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'periodNote' | translate}}</mat-label>
-                <input matInput id="prize-description">
+                <input matInput id="period-note" name="editPeriodField3" [(ngModel)]="periodNote">
             </mat-form-field>
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="saveEditPeriod()" (click)="goNewPeriod()">{{'savePeriod' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="deletePeriod()" (click)="goNewPeriod()">{{'deletePeriod' | translate}}</button>
                 </mat-grid-tile>
@@ -215,7 +215,7 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary" (click)="addPeriod()">{{'savePeriod' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="addPeriod()">{{'savePeriod' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
@@ -246,7 +246,7 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary" (click)="addFinalPrizes()" (click)="goNewPeriod()">{{'saveFinalPrizes' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="addFinalPrizes()" (click)="goNewPeriod()">{{'saveFinalPrizes' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
                 <button mat-raised-button class="all-button" color="warn" (click)="deleteFinalPrizes()" (click)="goNewPeriod()">{{'deleteFinalPrizes' | translate}}</button>
             </mat-grid-tile>
@@ -271,41 +271,41 @@
         <form class="edit-panel">
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'prizeDenomination' | translate}}</mat-label>
-                <input matInput id="prize-denomination" value="{{prizeDesc}}" required>
+                <input matInput id="prize-denomination" name="editPrizeField1" [(ngModel)]="prizeDesc" required>
             </mat-form-field>
             <br>
             <label>{{'assignedTo' | translate}}:</label>
             <mat-form-field appearance="fill" class="input-half-right">
                 <mat-icon matSuffix style="cursor: pointer">close</mat-icon>
                 <mat-label>{{ 'Nickname / ID' }}</mat-label>
-                <input matInput id="prize-assignment" value="{{nickname}}">
+                <input matInput id="prize-assignment" name="editPrizeField2" [(ngModel)]="nickname">
             </mat-form-field>
             <br>
             <h3> {{'Sponsor' | translate}} </h3>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorName' | translate}}</mat-label>
-                <input matInput id="sponsor-name" value="{{sponsorName}}" >
+                <input matInput id="sponsor-name" name="editPrizeField3" [(ngModel)]="sponsorName" >
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorDescription' | translate}}</mat-label>
-                <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-description" value="{{sponsorDesc}}">
+                <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-description" name="editPrizeField4" [(ngModel)]="sponsorDesc">
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
-                <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-website" value="{{sponsorWebsite}}">
+                <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-website" name="editPrizeField5" [(ngModel)]="sponsorWebsite">
             </mat-form-field>
             <h3>{{'prizeNote' | translate}}</h3>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'prizeNote' | translate}}</mat-label>
-                <input matInput id="prize-description" value="{{prizeDesc}}">
+                <input matInput id="prize-description" name="editPrizeField6" [(ngModel)]="rewardNote">
             </mat-form-field>
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="saveEditPrize()" (click)="goNewPeriod()">{{'savePrize' | translate}}</button>
                     <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="deletePrize()" (click)="goNewPeriod()">{{'deletePrize' | translate}}</button>

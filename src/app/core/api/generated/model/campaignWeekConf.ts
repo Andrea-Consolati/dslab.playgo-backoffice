@@ -17,4 +17,5 @@ export interface CampaignWeekConf {
   dateTo?: number;
   rewards?: Array<CampaignReward>;
   weekNumber?: number;
+  desc?: { [key: string]: string };
 }

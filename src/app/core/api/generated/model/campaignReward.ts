@@ -12,10 +12,10 @@
 
 export interface CampaignReward {
   desc?: { [key: string]: string };
-  position?: number;
   rewardNote?: { [key: string]: string };
   sponsorDesc?: { [key: string]: string };
-  sponsor?: { [key: string]: string };
-  sponsorWebsite?: { [key: string]: string };
-  winner?: { [key: string]: string };
+  sponsor?: string;
+  sponsorWebsite?: string;
+  winner?: string;
+  position?: number;
 }

@@ -18,7 +18,7 @@ import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved
 })
 
 export class RewardsComponent implements OnInit {
-  selectedLang: string;
+  selectedLang: string = "it";
   campaign: CampaignClass;
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ["index-dates"];
@@ -46,8 +46,9 @@ export class RewardsComponent implements OnInit {
   rewardNote: string;
   weekNumberTmp: number;
   indiceTmp: number;
-  premioDiProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: {"it": "sponsor"}, sponsorWebsite: {"it": "sito web sponsor"}, winner: {"it": "vincitore"} };
+  premioDiProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: "sponsor", sponsorWebsite: "sito web sponsor", winner: "vincitore" };
   arrayRewards: Array<CampaignReward> = [];
+  periodNote: string;
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -273,7 +274,15 @@ export class RewardsComponent implements OnInit {
     this.viewFinalPrizes = false;
     this.dateFrom = this.createDate(oggetto.dateFrom);
     this.dateTo = this.createDate(oggetto.dateTo);
+    this.periodNote = oggetto.desc[this.selectedLang];
     this.weekNumberTmp = weekNumber;
+  }
+
+  saveEditPeriod() {
+    this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+    this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
+    this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
+    this.reloadAllWeeks();
   }
 
   goEditPrize(oggetto, weekNumber, indice) {
@@ -283,13 +292,31 @@ export class RewardsComponent implements OnInit {
     this.viewNewPrize=false;
     this.viewFinalPrizes = false;
     this.prizeDesc = oggetto.desc[this.selectedLang];
-    this.nickname = oggetto.winner[this.selectedLang];
-    this.sponsorName = oggetto.sponsor[this.selectedLang];
+    this.nickname = oggetto.winner;
+    this.sponsorName = oggetto.sponsor;
     this.sponsorDesc = oggetto.sponsorDesc[this.selectedLang];
-    this.sponsorWebsite = oggetto.sponsorWebsite[this.selectedLang];
+    this.sponsorWebsite = oggetto.sponsorWebsite;
     this.rewardNote = oggetto.rewardNote[this.selectedLang];
     this.indiceTmp = indice;
     this.weekNumberTmp = weekNumber;
+  }
+
+  saveEditPrize() {
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.prizeDesc;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+    } else {
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.prizeDesc;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+    }
   }
 
   goNewPeriod() {
@@ -323,13 +350,13 @@ export class RewardsComponent implements OnInit {
     } else {
       this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
     }
-    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+    this.reloadAllWeeks();
     this.ripristinaOrdinamentoPeriodi();
   }
 
   deleteFinalPrizes() {
     this.campaign.weekConfs.splice(0, 1);
-    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+    this.reloadAllWeeks();
   }
 
   ripristinaOrdinamentoPeriodi() {
@@ -353,13 +380,13 @@ export class RewardsComponent implements OnInit {
   addPeriod() {
     var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: this.campaign.weekConfs.length };
     this.campaign.weekConfs.push(periodoDiProva);
-    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+    this.reloadAllWeeks();
   }
 
   addFinalPrizes() {
     var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: 0 };
     this.campaign.weekConfs.unshift(periodoDiProva);
-    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+    this.reloadAllWeeks();
   }
 
   switchLoadCSV() {
@@ -369,12 +396,10 @@ export class RewardsComponent implements OnInit {
   fromDateTimeToLong(dateString: string): number {
     if (dateString.length === "yyyy-mm-ddThh:mm:ss".length) {
       const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm:ss", {
-        zone: this.territorySelected.timezone,
       });
       return newDate.toMillis();
     } else {
       const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm", {
-        zone: this.territorySelected.timezone,
       });
       return newDate.toMillis();
     }
@@ -391,5 +416,9 @@ export class RewardsComponent implements OnInit {
 
   selezionaLinguaInglese() {
     this.selectedLang = "en";
+  }
+
+  reloadAllWeeks() {
+    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
   }
 }
