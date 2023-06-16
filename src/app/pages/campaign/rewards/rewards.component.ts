@@ -47,7 +47,7 @@ export class RewardsComponent implements OnInit {
   weekNumberTmp: number;
   indiceTmp: number;
   premioDiProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: {"it": "sponsor"}, sponsorWebsite: {"it": "sito web sponsor"}, winner: {"it": "vincitore"} };
-  arrayRewards: Array<CampaignReward> = [this.premioDiProva];
+  arrayRewards: Array<CampaignReward> = [];
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -276,7 +276,7 @@ export class RewardsComponent implements OnInit {
     this.weekNumberTmp = weekNumber;
   }
 
-  goEditPrizes(oggetto, weekNumber, indice) {
+  goEditPrize(oggetto, weekNumber, indice) {
     this.viewEditPeriod=false;
     this.viewEditPrizes=true;
     this.viewNewPeriod=false;
@@ -318,8 +318,28 @@ export class RewardsComponent implements OnInit {
   }
 
   deletePeriod() {
-    this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+    } else {
+      this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
+    }
     this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+    this.ripristinaOrdinamentoPeriodi();
+  }
+
+  deleteFinalPrizes() {
+    this.campaign.weekConfs.splice(0, 1);
+    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+  }
+
+  ripristinaOrdinamentoPeriodi() {
+    for (var i = 0; i <= this.campaign.weekConfs.length; i++) {
+      if (this.checkWeek0()) {
+        this.campaign.weekConfs[i].weekNumber = i;
+      } else {
+        this.campaign.weekConfs[i].weekNumber = i + 1;
+      }
+    }
   }
 
   addPrize() {
@@ -333,6 +353,12 @@ export class RewardsComponent implements OnInit {
   addPeriod() {
     var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: this.campaign.weekConfs.length };
     this.campaign.weekConfs.push(periodoDiProva);
+    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+  }
+
+  addFinalPrizes() {
+    var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: 0 };
+    this.campaign.weekConfs.unshift(periodoDiProva);
     this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
   }
 

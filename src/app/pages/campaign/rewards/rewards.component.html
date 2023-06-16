@@ -49,14 +49,14 @@
         <mat-grid-tile [colspan]="4" [rowspan]="1">
             <div class="download-button">
                 <mat-form-field appearance="fill" class="input-class">
-                    <input matInput type="file" accept=".csv" id="weeks" (change)="uploadWeeks($event)">
+                    <input matInput type="file" accept=".csv" id="weeks" formControlName="weeks" (change)="uploadWeeks($event)">
                 </mat-form-field>
             </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="4" [rowspan]="1">
             <div class="download-button">
                 <mat-form-field appearance="fill" class="input-class">
-                    <input matInput type="file" accept=".csv" id="prizes" (change)="uploadRewards($event)">
+                    <input matInput type="file" accept=".csv" id="prizes" formControlName="prizes" (change)="uploadRewards($event)">
                 </mat-form-field>
             </div>
         </mat-grid-tile>
@@ -110,7 +110,7 @@
                     <div class="content">
                         <p *ngFor="let item of element.rewards;let i = index">
                             {{i+1}}°: {{item.desc[selectedLang]}}
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPrizes(item, element.weekNumber, i)">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditPrize(item, element.weekNumber, i)">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </p>
@@ -175,7 +175,7 @@
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
                     <button mat-raised-button class="all-button" color="primary">{{'savePeriod' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="warn" (click)="deletePeriod()">{{'deletePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn" (click)="deletePeriod()" (click)="goNewPeriod()">{{'deletePeriod' | translate}}</button>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>
@@ -246,9 +246,9 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary">{{'saveFinalPrizes' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" (click)="addFinalPrizes()" (click)="goNewPeriod()">{{'saveFinalPrizes' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                <button mat-raised-button class="all-button" color="warn">{{'deleteFinalPrizes' | translate}}</button>
+                <button mat-raised-button class="all-button" color="warn" (click)="deleteFinalPrizes()" (click)="goNewPeriod()">{{'deleteFinalPrizes' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
@@ -299,7 +299,7 @@
             <h3>{{'prizeNote' | translate}}</h3>
             <mat-form-field appearance="fill" class="input-full">
                 <mat-label>{{'prizeNote' | translate}}</mat-label>
-                <input matInput id="prize-description" >
+                <input matInput id="prize-description" value="{{prizeDesc}}">
             </mat-form-field>
         </form>
         <div>
@@ -308,11 +308,11 @@
                     <button mat-raised-button class="all-button" color="primary">{{'savePrize' | translate}}</button>
                     <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="warn" (click)="deletePrize()">{{'deletePrize' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn" (click)="deletePrize()" (click)="goNewPeriod()">{{'deletePrize' | translate}}</button>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>       
-</form>
+    </form>
 <!-- END EDIT PRIZES SYSTEM -->
 
 
@@ -362,9 +362,13 @@
         </mat-form-field>
     </form>
     <div>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="addPrize()">{{'savePrize' | translate}}</button>
-        <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
-        <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
+        <mat-grid-list cols="1" rowHeight="45px">
+            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="addPrize()" (click)="goNewPrize(weekNumberTmp)">{{'savePrize' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
+                <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
+            </mat-grid-tile>
+        </mat-grid-list>
     </div>       
 </form>
 <!-- END NEW PRIZE SYSTEM -->
