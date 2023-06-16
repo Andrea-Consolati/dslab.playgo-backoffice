@@ -31,24 +31,23 @@ export class RewardsComponent implements OnInit {
   i: any;
   l = 1;
   viewEditPeriod: boolean = false;
-  viewEditPrizes: boolean = false;
+  viewEditRewards: boolean = false;
   viewNewPeriod: boolean = true;
-  viewNewPrize: boolean = false;
-  viewFinalPrizes: boolean = false;
+  viewNewReward: boolean = false;
+  viewFinalRewards: boolean = false;
   viewLoadCSV: boolean = false;
   dateFrom: string;
   dateTo: string;
-  prizeDesc: string;
+  rewardDesc: string;
   nickname: string;
   sponsorName: string;
   sponsorDesc: string;
   sponsorWebsite: string;
   rewardNote: string;
+  finalRewardsNote: string;
+  periodNote: string;
   weekNumberTmp: number;
   indiceTmp: number;
-  premioDiProva: CampaignReward = { desc: {"it": "descrizione"}, position: 1, rewardNote: {"it": "note premio"}, sponsorDesc: {"it": "descrizione sponsor"}, sponsor: "sponsor", sponsorWebsite: "sito web sponsor", winner: "vincitore" };
-  arrayRewards: Array<CampaignReward> = [];
-  periodNote: string;
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -61,7 +60,7 @@ export class RewardsComponent implements OnInit {
   ngOnInit(): void {
     this.validatingForm = this.formBuilder.group({
       weeks: new FormControl("", [Validators.required]),
-      prizes: new FormControl("", [Validators.required]),
+      rewards: new FormControl("", [Validators.required]),
     });
     this.validatingForm.patchValue({
       defaultSurvey: "-",
@@ -78,7 +77,7 @@ export class RewardsComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  addPrizes() {
+  addRewards() {
     this.msgError = undefined;
     if (this.validatingForm.valid) {
       const bodyWeek = new FormData();
@@ -213,7 +212,7 @@ export class RewardsComponent implements OnInit {
     if (type === "rewDownload") {
       link.setAttribute(
         "download",
-        this.translate.instant("prizes_example.csv")
+        this.translate.instant("rewards_example.csv")
       );
     } else {
       link.setAttribute(
@@ -258,20 +257,21 @@ export class RewardsComponent implements OnInit {
     return false;
   }
 
-  goFinalPrizes() {
-    this.viewFinalPrizes = true;
+  goFinalRewards() {
+    this.clearValue();
+    this.viewFinalRewards = true;
     this.viewEditPeriod=false;
-    this.viewEditPrizes=false;
+    this.viewEditRewards=false;
     this.viewNewPeriod=false;
-    this.viewNewPrize=false;
+    this.viewNewReward=false;
   }
 
   goEditPeriod(oggetto, weekNumber) {
     this.viewEditPeriod=true;
-    this.viewEditPrizes=false;
+    this.viewEditRewards=false;
     this.viewNewPeriod=false;
-    this.viewNewPrize=false;
-    this.viewFinalPrizes = false;
+    this.viewNewReward=false;
+    this.viewFinalRewards = false;
     this.dateFrom = this.createDate(oggetto.dateFrom);
     this.dateTo = this.createDate(oggetto.dateTo);
     this.periodNote = oggetto.desc[this.selectedLang];
@@ -279,19 +279,24 @@ export class RewardsComponent implements OnInit {
   }
 
   saveEditPeriod() {
-    this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-    this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
-    this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
-    this.reloadAllWeeks();
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+      this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
+      this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
+    } else {
+      this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
+    }
   }
 
-  goEditPrize(oggetto, weekNumber, indice) {
+  goEditReward(oggetto, weekNumber, indice) {
     this.viewEditPeriod=false;
-    this.viewEditPrizes=true;
+    this.viewEditRewards=true;
     this.viewNewPeriod=false;
-    this.viewNewPrize=false;
-    this.viewFinalPrizes = false;
-    this.prizeDesc = oggetto.desc[this.selectedLang];
+    this.viewNewReward=false;
+    this.viewFinalRewards = false;
+    this.rewardDesc = oggetto.desc[this.selectedLang];
     this.nickname = oggetto.winner;
     this.sponsorName = oggetto.sponsor;
     this.sponsorDesc = oggetto.sponsorDesc[this.selectedLang];
@@ -301,16 +306,16 @@ export class RewardsComponent implements OnInit {
     this.weekNumberTmp = weekNumber;
   }
 
-  saveEditPrize() {
+  saveEditReward() {
     if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.prizeDesc;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
     } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.prizeDesc;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
       this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
       this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
       this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
@@ -319,24 +324,7 @@ export class RewardsComponent implements OnInit {
     }
   }
 
-  goNewPeriod() {
-    this.viewEditPeriod=false;
-    this.viewEditPrizes=false;
-    this.viewNewPeriod=true;
-    this.viewNewPrize=false;
-    this.viewFinalPrizes = false;
-  }
-
-  goNewPrize(weekNumber) {
-    this.viewEditPeriod=false;
-    this.viewEditPrizes=false;
-    this.viewNewPeriod=false;
-    this.viewNewPrize=true;
-    this.viewFinalPrizes = false;
-    this.weekNumberTmp = weekNumber;
-  }
-
-  deletePrize() {
+  deleteReward() {
     if (this.checkWeek0()) {
       this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
     } else {
@@ -354,7 +342,7 @@ export class RewardsComponent implements OnInit {
     this.ripristinaOrdinamentoPeriodi();
   }
 
-  deleteFinalPrizes() {
+  deleteFinalRewards() {
     this.campaign.weekConfs.splice(0, 1);
     this.reloadAllWeeks();
   }
@@ -369,25 +357,65 @@ export class RewardsComponent implements OnInit {
     }
   }
 
-  addPrize() {
+
+
+
+
+
+
+
+
+  goNewPeriod() {
+    this.clearValue();
+    this.viewEditPeriod=false;
+    this.viewEditRewards=false;
+    this.viewNewPeriod=true;
+    this.viewNewReward=false;
+    this.viewFinalRewards = false;
+  }
+
+  goNewReward(weekNumber) {
+    this.clearValue();
+    this.viewEditPeriod=false;
+    this.viewEditRewards=false;
+    this.viewNewPeriod=false;
+    this.viewNewReward=true;
+    this.viewFinalRewards = false;
+    this.weekNumberTmp = weekNumber;
+  }
+
+  addReward() {
+    var newReward: CampaignReward = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
     if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.premioDiProva);
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(newReward);
     } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.premioDiProva);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(newReward);
     }
   }
-  
+
   addPeriod() {
-    var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: this.campaign.weekConfs.length };
-    this.campaign.weekConfs.push(periodoDiProva);
+    var newVoidRewardsArray: Array<CampaignReward> = [];
+    var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length };
+    this.campaign.weekConfs.push(newPeriod);
     this.reloadAllWeeks();
   }
 
-  addFinalPrizes() {
-    var periodoDiProva: CampaignWeekConf = { campaignId: "sono un fantastico campaignId", dateFrom: 1, dateTo: 1, rewards: this.arrayRewards, weekNumber: 0 };
-    this.campaign.weekConfs.unshift(periodoDiProva);
+  addFinalRewards() {
+    var newVoidRewardsArray: Array<CampaignReward> = [];
+    var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0 };
+    this.campaign.weekConfs.unshift(newFinalRewards);
     this.reloadAllWeeks();
   }
+
+
+
+
+
+
+
+
+
+
 
   switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;
@@ -420,5 +448,18 @@ export class RewardsComponent implements OnInit {
 
   reloadAllWeeks() {
     this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
+  }
+
+  clearValue(): void {
+    this.rewardDesc = undefined;
+    this.nickname = undefined;
+    this.sponsorName = undefined;
+    this.sponsorDesc = undefined;
+    this.sponsorWebsite = undefined;
+    this.rewardNote = undefined;
+    this.periodNote = undefined;
+    this.finalRewardsNote = undefined;
+    this.dateFrom = undefined;
+    this.dateTo = undefined;
   }
 }
