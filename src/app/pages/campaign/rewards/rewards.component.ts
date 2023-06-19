@@ -58,6 +58,9 @@ export class RewardsComponent implements OnInit {
   isDeleteRewardPopupOpen: boolean = false;
   isAddRewardPopupOpen: boolean = false;
   isCancelPopupOpen: boolean = false;
+  isSpostaPopupOpen: boolean = false;
+  selectedPeriod: number;
+  selectedPrize: number;
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -497,5 +500,27 @@ export class RewardsComponent implements OnInit {
 
   toggleCancelPopup() {
     this.isCancelPopupOpen = !this.isCancelPopupOpen;
+  }
+
+  toggleSpostaPopup() {
+    this.isSpostaPopupOpen = !this.isSpostaPopupOpen;
+  }
+
+  selectPeriod(i) {
+    this.selectedPeriod = i;
+  }
+
+  selectReward(i) {
+    this.selectedPrize = i;
+  }
+
+  sposta() {
+    this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 2, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+    this.deleteReward();
+  }
+
+  generaNuoviValori() {
+    this.selectedPeriod = this.weekNumberTmp;
+    this.selectedPrize = this.indiceTmp;
   }
 }

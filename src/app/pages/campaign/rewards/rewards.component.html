@@ -312,7 +312,7 @@
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
                     <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddRewardPopup()">{{'saveReward' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" (click)="toggleSpostaPopup()" (click)="generaNuoviValori()">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteRewardPopup()">{{'deleteReward' | translate}}</button>
                 </mat-grid-tile>
@@ -380,6 +380,45 @@
 </form>
 <!-- END NEW REWARD SYSTEM -->
 </div>
+
+
+
+<!-- SPOSTA -->
+<div class="popup" *ngIf="isSpostaPopupOpen">
+    <div class="popup-content">
+        <h2>Sposta il premio</h2>
+        <span>Periodo:</span>
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{ 'Seleziona periodo' }}</mat-label>
+            <mat-select *ngIf="checkWeek0()">
+                <mat-option *ngFor="let item of campaign.weekConfs; let i = index">
+                    <p (click)="selectPeriod(i)">{{ i }}</p>
+                </mat-option>
+            </mat-select>
+            <mat-select *ngIf="!checkWeek0()">
+                <mat-option *ngFor="let item of campaign.weekConfs; let i = index">
+                    <p (click)="selectPeriod(i + 1)">{{ i + 1 }}</p>
+                </mat-option>
+            </mat-select>
+            <input matInput name="rewardFieldSposta" [(ngModel)]="selectedPeriod">
+        </mat-form-field>
+        <br>
+        <span>Sposta prima del premio:</span>
+        <mat-form-field appearance="fill" class="input-half-right">
+            <mat-label>{{ 'Seleziona periodo' }}</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let item of campaign.weekConfs[weekNumberTmp].rewards; let i = index">
+                    <p (click)="selectReward(i + 1)">{{ i + 1 }}</p>
+                </mat-option>
+            </mat-select>
+            <input matInput name="rewardFieldSposta" [(ngModel)]="selectedPrize">
+        </mat-form-field>
+        <br>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSpostaPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="sposta()" (click)="toggleSpostaPopup()">{{'save' | translate}}</button>
+    </div>
+</div>
+<!-- END SPOSTA -->
 
 
 
@@ -463,6 +502,8 @@
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleCancelPopup()" (click)="goNewPeriod()">{{'yes' | translate}}</button>
     </div>
 </div>
+<!-- END POPUPS -->
+
 
 
 <!-- IN PROGRESS -->
