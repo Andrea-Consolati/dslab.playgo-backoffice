@@ -17,6 +17,7 @@
 <!-- END HEADER BAR -->
 
 
+
 <!-- LOAD CSV -->
 <form *ngIf="viewLoadCSV" [formGroup]="validatingForm" class="norm-border">
     <mat-grid-list cols="8" rowHeight="45px">
@@ -75,6 +76,8 @@
     </mat-grid-list>
 </form>
 <!-- END LOAD CSV -->
+
+
 
 <div class="tutto">
 <!-- TABLE -->
@@ -173,14 +176,15 @@
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="saveEditPeriod()" (click)="goNewPeriod()" (click)="clearValue()">{{'savePeriod' | translate}}</button>
-                    <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="warn" (click)="deletePeriod()" (click)="goNewPeriod()">{{'deletePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleSaveEditPeriodPopup()">{{'savePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()">{{'deletePeriod' | translate}}</button>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>
     </form>
 <!-- END EDIT PERIOD SYSTEM -->
+
 
 
 <!-- NEW PERIOD SYSTEM -->
@@ -215,13 +219,14 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="addPeriod()">{{'savePeriod' | translate}}</button>
-                <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()" (click)="clearValue()">{{'cancel' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddPeriodPopup()">{{'savePeriod' | translate}}</button>
+                <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
 </form>
 <!-- END NEW PERIOD SYSTEM -->
+
 
 
 <!-- FINAL REWARDS -->
@@ -246,14 +251,15 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="addFinalRewards()" (click)="goNewPeriod()">{{'saveFinalRewards' | translate}}</button>
-                <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
-                <button mat-raised-button class="all-button" color="warn" (click)="deleteFinalRewards()" (click)="goNewPeriod()">{{'deleteFinalRewards' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddFinalRewardsPopup()">{{'saveFinalRewards' | translate}}</button>
+                <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
+                <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteFinalRewardsdPopup()">{{'deleteFinalRewards' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
 </form>
 <!-- END FINAL REWARDS -->
+
 
 
 <!-- EDIT REWARDS SYSTEM -->
@@ -305,15 +311,16 @@
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="saveEditReward()" (click)="goNewPeriod()">{{'saveReward' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddRewardPopup()">{{'saveReward' | translate}}</button>
                     <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
-                    <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="goNewPeriod()" (click)="clearValue()">{{'cancel' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="warn" (click)="deleteReward()" (click)="goNewPeriod()">{{'deleteReward' | translate}}</button>
+                    <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteRewardPopup()">{{'deleteReward' | translate}}</button>
                 </mat-grid-tile>
             </mat-grid-list>
         </div>       
     </form>
 <!-- END EDIT REWARDS SYSTEM -->
+
 
 
 <!-- NEW REWARD SYSTEM -->
@@ -365,14 +372,96 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="addReward()" (click)="goNewReward(weekNumberTmp)">{{'saveReward' | translate}}</button>
-                <button mat-raised-button class="all-button" color="primary">{{'move' | translate}}</button>
-                <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="goNewPeriod()">{{'cancel' | translate}}</button>
+                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddRewardPopup()">{{'saveReward' | translate}}</button>
+                <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>       
 </form>
 <!-- END NEW REWARD SYSTEM -->
+</div>
+
+
+
+<!-- POPUPS -->
+<div class="popup" *ngIf="isSaveEditPeriodPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler salvare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveEditPeriodPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveEditPeriodPopup()" (click)="saveEditPeriod()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isDeleteEditPeriodPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler eliminare il periodo?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteEditPerioddPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()" (click)="deletePeriod()" (click)="goNewPeriod()">{{'delete' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isAddPeriodPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler salvare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddPeriodPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddPeriodPopup()" (click)="addPeriod()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isAddFinalRewardsPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler salvare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddFinalRewardsPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddFinalRewardsPopup()" (click)="addFinalRewards()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveFinalRewardsPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler salvare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveFinalRewardsPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveFinalRewardsPopup()" (click)="addFinalRewards()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isDeleteFinalRewardsPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler eliminare i premi finali?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteFinalRewardsdPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteFinalRewardsdPopup()" (click)="deleteFinalRewards()" (click)="goNewPeriod()">{{'delete' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveEditRewardPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler salvare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveEditRewardPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveEditRewardPopup()" (click)="saveEditReward()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isDeleteRewardPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler eliminare il premio?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteRewardPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteRewardPopup()" (click)="deleteReward()" (click)="goNewPeriod()">{{'delete' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isAddRewardPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler salvare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddRewardPopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddRewardPopup()" (click)="addReward()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isCancelPopupOpen">
+    <div class="popup-content">
+        <h2>Sei sicuro di voler annullare le modifiche?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleCancelPopup()">{{'no' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleCancelPopup()" (click)="goNewPeriod()">{{'yes' | translate}}</button>
+    </div>
 </div>
 
 

@@ -48,6 +48,16 @@ export class RewardsComponent implements OnInit {
   periodNote: string;
   weekNumberTmp: number;
   indiceTmp: number;
+  isSaveEditPeriodPopupOpen: boolean = false;
+  isDeleteEditPeriodPopupOpen: boolean = false;
+  isAddPeriodPopupOpen: boolean = false;
+  isAddFinalRewardsPopupOpen: boolean = false;
+  isSaveFinalRewardsPopupOpen: boolean = false;
+  isDeleteFinalRewardsPopupOpen: boolean = false;
+  isSaveEditRewardPopupOpen: boolean = false;
+  isDeleteRewardPopupOpen: boolean = false;
+  isAddRewardPopupOpen: boolean = false;
+  isCancelPopupOpen: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -357,14 +367,6 @@ export class RewardsComponent implements OnInit {
     }
   }
 
-
-
-
-
-
-
-
-
   goNewPeriod() {
     this.clearValue();
     this.viewEditPeriod=false;
@@ -406,16 +408,6 @@ export class RewardsComponent implements OnInit {
     this.campaign.weekConfs.unshift(newFinalRewards);
     this.reloadAllWeeks();
   }
-
-
-
-
-
-
-
-
-
-
 
   switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;
@@ -465,5 +457,45 @@ export class RewardsComponent implements OnInit {
 
   clearNickname() {
     this.nickname = undefined;
+  }
+
+  toggleSaveEditPeriodPopup() {
+    this.isSaveEditPeriodPopupOpen = !this.isSaveEditPeriodPopupOpen;
+  }
+
+  toggleDeleteEditPerioddPopup() {
+    this.isDeleteEditPeriodPopupOpen = !this.isDeleteEditPeriodPopupOpen;
+  }
+
+  toggleAddPeriodPopup() {
+    this.isAddPeriodPopupOpen = !this.isAddPeriodPopupOpen;
+  }
+
+  toggleAddFinalRewardsPopup() {
+    this.isAddFinalRewardsPopupOpen = !this.isAddFinalRewardsPopupOpen;
+  }
+
+  toggleSaveFinalRewardsPopup() {
+    this.isSaveFinalRewardsPopupOpen = !this.isSaveFinalRewardsPopupOpen;
+  }
+
+  toggleDeleteFinalRewardsdPopup() {
+    this.isDeleteFinalRewardsPopupOpen = !this.isDeleteFinalRewardsPopupOpen;
+  }
+
+  toggleDeleteRewardPopup() {
+    this.isDeleteRewardPopupOpen = !this.isDeleteRewardPopupOpen;
+  }
+
+  toggleSaveEditRewardPopup() {
+    this.isSaveEditRewardPopupOpen = !this.isSaveEditRewardPopupOpen;
+  }
+
+  toggleAddRewardPopup() {
+    this.isAddRewardPopupOpen = !this.isAddRewardPopupOpen;
+  }
+
+  toggleCancelPopup() {
+    this.isCancelPopupOpen = !this.isCancelPopupOpen;
   }
 }

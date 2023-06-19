@@ -354,6 +354,8 @@
   "saveFinalRewards":"Save final rewards",
   "deleteFinalRewards":"Delete final rewards",
   "periodNote":"Period note",
-  "finalRewardsNote":"Final rewards note"
+  "finalRewardsNote":"Final rewards note",
+  "yes":"Yes",
+  "no":"No"
   }
   
