@@ -88,7 +88,7 @@
     <ng-container matColumnDef="index-dates" >
         <th *matHeaderCellDef>
         </th>
-        <td mat-cell *matCellDef="let element" class="bold">
+        <td mat-cell *matCellDef="let element" style="font-weight: bold">
             <div class="panel">
                 <details>
                     <summary *ngIf="element.weekNumber == 0" style="background-color: #f0bc5498;">
@@ -168,7 +168,7 @@
                 </mat-form-field>
             </div>
             <h3>{{'periodNote' | translate}}</h3>
-            <mat-form-field appearance="fill" class="input-full">
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{'periodNote' | translate}}</mat-label>
                 <input matInput id="period-note" name="editPeriodField3" [(ngModel)]="periodNote">
             </mat-form-field>
@@ -212,7 +212,7 @@
             </mat-form-field>
         </div>
         <h3>{{'periodNote' | translate}}</h3>
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'periodNote' | translate}}</mat-label>
             <input matInput id="reward-description" name="newPeriodField3" [(ngModel)]="periodNote">
         </mat-form-field>
@@ -245,7 +245,7 @@
     </mat-grid-list>
     <form class="edit-panel">
         <h3>{{'finalRewardsNote' | translate}}</h3>
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'finalRewardsNote' | translate}}</mat-label>
             <input matInput id="reward-description" name="finalRewardsField" [(ngModel)]="finalRewardsNote">
         </mat-form-field>
@@ -277,7 +277,7 @@
         </mat-grid-tile>
     </mat-grid-list>
         <form class="edit-panel">
-            <mat-form-field appearance="fill" class="input-full">
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{'rewardDenomination' | translate}}</mat-label>
                 <input matInput id="reward-denomination" name="editrewardField1" [(ngModel)]="rewardDesc" required>
             </mat-form-field>
@@ -290,22 +290,22 @@
             </mat-form-field>
             <br>
             <h3> {{'Sponsor' | translate}} </h3>
-            <mat-form-field appearance="fill" class="input-full">
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{'sponsorName' | translate}}</mat-label>
                 <input matInput id="sponsor-name" name="editrewardField3" [(ngModel)]="sponsorName" >
             </mat-form-field>
             <br>
-            <mat-form-field appearance="fill" class="input-full">
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{'sponsorDescription' | translate}}</mat-label>
                 <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-description" name="editrewardField4" [(ngModel)]="sponsorDesc">
             </mat-form-field>
             <br>
-            <mat-form-field appearance="fill" class="input-full">
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
                 <input matInput [disabled]="!checkSponsor(sponsorName, sponsorDesc, sponsorWebsite)" id="sponsor-website" name="editrewardField5" [(ngModel)]="sponsorWebsite">
             </mat-form-field>
             <h3>{{'rewardNote' | translate}}</h3>
-            <mat-form-field appearance="fill" class="input-full">
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{'rewardNote' | translate}}</mat-label>
                 <input matInput id="reward-note" name="editrewardField6" [(ngModel)]="rewardNote">
             </mat-form-field>
@@ -338,7 +338,7 @@
         </mat-grid-tile>
     </mat-grid-list>
     <form class="edit-panel">
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'rewardDenomination' | translate}}</mat-label>
             <input matInput id="reward-denomination" name="newRewardField6" [(ngModel)]="rewardDesc" required>
         </mat-form-field>
@@ -351,22 +351,22 @@
         </mat-form-field>
         <br>
         <h3> {{'Sponsor' | translate}} </h3>
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'sponsorName' | translate}}</mat-label>
             <input matInput type="text" id="sponsor-name" name="newRewardField3" [(ngModel)]="sponsorName">
         </mat-form-field>
         <br>
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'sponsorDescription' | translate}}</mat-label>
             <input matInput id="sponsor-description"  name="newRewardField4" [(ngModel)]="sponsorDesc">
         </mat-form-field>
         <br>
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'sponsorWebsite' | translate}}</mat-label>
             <input matInput id="sponsor-website"  name="newRewardField5" [(ngModel)]="sponsorWebsite">
         </mat-form-field>
         <h3>{{'rewardNote' | translate}}</h3>
-        <mat-form-field appearance="fill" class="input-full">
+        <mat-form-field appearance="fill" class="full-width">
             <mat-label>{{'rewardNote' | translate}}</mat-label>
             <input matInput id="reward-note" name="newRewardField6" [(ngModel)]="rewardNote">
         </mat-form-field>
@@ -437,7 +437,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler eliminare il periodo?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteEditPerioddPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()" (click)="goDefaultPage()" (click)="goDefaultPage()">{{'delete' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()" (click)="deletePeriod()" (click)="goDefaultPage()">{{'delete' | translate}}</button>
     </div>
 </div>
 

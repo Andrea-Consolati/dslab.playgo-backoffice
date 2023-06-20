@@ -68,7 +68,6 @@ export class RewardsComponent implements OnInit {
   isSaveAndChangeLanguage4: boolean = false;
   isSaveAndChangeLanguage5: boolean = false;
 
-
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
     private formBuilder: FormBuilder,
@@ -367,6 +366,7 @@ export class RewardsComponent implements OnInit {
         this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
       }
       this.ripristinaOrdinamentoPeriodi();
+      this.reloadAllWeeks();
   }
 
   deleteFinalRewards() {
@@ -525,15 +525,19 @@ export class RewardsComponent implements OnInit {
   toggleSaveAndChangeLanguagePopup1() {
     this.isSaveAndChangeLanguage1 = !this.isSaveAndChangeLanguage1;
   }
+
   toggleSaveAndChangeLanguagePopup2() {
     this.isSaveAndChangeLanguage2 = !this.isSaveAndChangeLanguage2;
   }
+
   toggleSaveAndChangeLanguagePopup3() {
     this.isSaveAndChangeLanguage3 = !this.isSaveAndChangeLanguage3;
   }
+
   toggleSaveAndChangeLanguagePopup4() {
     this.isSaveAndChangeLanguage4 = !this.isSaveAndChangeLanguage4;
   }
+
   toggleSaveAndChangeLanguagePopup5() {
     this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
   }
