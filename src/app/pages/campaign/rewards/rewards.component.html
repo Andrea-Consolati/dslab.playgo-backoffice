@@ -285,9 +285,11 @@
             <label>{{'assignedTo' | translate}}:</label>
             <mat-form-field appearance="fill" class="input-half-right">
                 <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
-                <mat-label>{{ 'Nickname / ID' }}</mat-label>
-                <input matInput id="reward-assignment" name="editrewardField2" [(ngModel)]="nickname">
+                <mat-label>{{ "nickname" }}</mat-label>
+                <input matInput type="text" [(ngModel)]="filtroNome" (input)="cercaPerNome()" placeholder="Cerca per nome">
+                <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)">{{ risultato.player.nickname }}  </mat-option>
             </mat-form-field>
+            
             <br>
             <h3> {{'Sponsor' | translate}} </h3>
             <mat-form-field appearance="fill" class="full-width">
@@ -346,9 +348,11 @@
         <label>{{'assignedTo' | translate}}:</label>
         <mat-form-field appearance="fill" class="input-half-right">
             <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
-            <mat-label>{{ 'Nickname / ID' }}</mat-label>
-            <input matInput id="reward-assignment" name="newRewardField2" [(ngModel)]="nickname">
+            <mat-label>{{ "nickname" }}</mat-label>
+            <input matInput type="text" [(ngModel)]="filtroNome" (input)="cercaPerNome()" placeholder="Cerca per nome">
+            <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)" (click)="changeName(risultato.player.nickname)">{{ risultato.player.nickname }}  </mat-option>
         </mat-form-field>
+        
         <br>
         <h3> {{'Sponsor' | translate}} </h3>
         <mat-form-field appearance="fill" class="full-width">
@@ -548,10 +552,8 @@
 
 
 <!-- IN PROGRESS -->
-<mat-form-field appearance="fill" class="full-width">
-    <mat-label>{{ 'Seleziona nickname' }}</mat-label>
-        <mat-option *ngFor="let item of listUserCampaign; let i = index">
-            {{listUserCampaign[i].player.nickname}}
-        </mat-option>
-    <input matInput>
-</mat-form-field>
+
+
+
+
+

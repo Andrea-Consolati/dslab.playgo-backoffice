@@ -14,6 +14,15 @@ import { PlayerCampaignClass } from "src/app/shared/classes/player-campaing-clas
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
 import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constants";
 
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+
+
+interface Elemento {
+  nome: string;
+  // ... altre proprietà ...
+}
+
 @Component({
   selector: "app-rewards",
   templateUrl: "./rewards.component.html",
@@ -21,6 +30,11 @@ import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constan
 })
 
 export class RewardsComponent implements OnInit {
+
+
+
+
+
   selectedLang: string = "it";
   campaign: CampaignClass;
   dataSource: MatTableDataSource<any>;
@@ -73,6 +87,12 @@ export class RewardsComponent implements OnInit {
   listUserCampaign: PlayerCampaignClass[];
   pageSizesOnTable:20;
   territoryId: string;
+  
+
+  myControl = new FormControl();
+  options: string[] = ['One', 'Two', 'Three'];
+  filteredOptions: Observable<string[]>;
+
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -89,6 +109,13 @@ export class RewardsComponent implements OnInit {
       weeks: new FormControl("", [Validators.required]),
       rewards: new FormControl("", [Validators.required]),
     });
+
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value)),
+      )
+
+
     this.validatingForm.patchValue({
       defaultSurvey: "-",
     });
@@ -643,4 +670,31 @@ export class RewardsComponent implements OnInit {
     this.weekNumberTmp = weekNumber;
     this.indiceTmp = indice;
   }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
+ 
+
+
+
+  filtroNome: string = '';
+  risultatiFiltrati=[] ;
+
+  cercaPerNome() {
+    this.risultatiFiltrati = this.listUserCampaign.filter(elemento =>
+      elemento.player.nickname.toLowerCase().includes(this.filtroNome.toLowerCase())
+    );
+  }
+
+  changeName(nome){
+
+    this.filtroNome=nome+" ";
+
+    this.cercaPerNome();
+
+  }
+
 }
