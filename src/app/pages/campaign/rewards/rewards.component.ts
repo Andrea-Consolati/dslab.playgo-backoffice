@@ -51,7 +51,6 @@ export class RewardsComponent implements OnInit {
   isSaveEditPeriodPopupOpen: boolean = false;
   isDeleteEditPeriodPopupOpen: boolean = false;
   isAddPeriodPopupOpen: boolean = false;
-  isAddFinalRewardsPopupOpen: boolean = false;
   isSaveFinalRewardsPopupOpen: boolean = false;
   isDeleteFinalRewardsPopupOpen: boolean = false;
   isSaveEditRewardPopupOpen: boolean = false;
@@ -67,7 +66,6 @@ export class RewardsComponent implements OnInit {
   isSaveAndChangeLanguage3: boolean = false;
   isSaveAndChangeLanguage4: boolean = false;
   isSaveAndChangeLanguage5: boolean = false;
-
 
 
   constructor(
@@ -285,6 +283,7 @@ export class RewardsComponent implements OnInit {
     this.viewEditRewards=false;
     this.viewNewPeriod=false;
     this.viewNewReward=false;
+    this.finalRewardsNote = this.campaign.weekConfs[0].desc[this.selectedLang];
   }
 
   goEditPeriod(oggetto, weekNumber) {
@@ -302,16 +301,17 @@ export class RewardsComponent implements OnInit {
   }
 
   saveEditPeriod() {
-    if (!this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-      this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
-      this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-      this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
-      this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
+    if (!this.checkDate()) {
+      if (this.checkWeek0()) {
+          this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+          this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
+          this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
+        } else {
+          this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+          this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
+          this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
+        }
     }
-    this.checkDate()
   }
 
   goEditReward(oggetto, weekNumber, indice) {
@@ -360,14 +360,12 @@ export class RewardsComponent implements OnInit {
   }
 
   deletePeriod() {
-    if (this.checkDate()) {
       if (!this.checkWeek0()) {
        this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
       } else {
         this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
       }
       this.ripristinaOrdinamentoPeriodi();
-    }
   }
 
   deleteFinalRewards() {
@@ -405,18 +403,18 @@ export class RewardsComponent implements OnInit {
   }
 
   addReward() {
-    var newReward: CampaignReward = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
+    this.oggettoTmp = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
     if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(newReward);
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoTmp);
     } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(newReward);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoTmp);
     }
   }
 
   addPeriod() {
-    if (this.checkDate()) {
+    if (!this.checkDate()) {
       var newVoidRewardsArray: Array<CampaignReward> = [];
-      var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length };
+      var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
       this.campaign.weekConfs.push(newPeriod);
       this.reloadAllWeeks();
     }
@@ -424,7 +422,7 @@ export class RewardsComponent implements OnInit {
 
   addFinalRewards() {
     var newVoidRewardsArray: Array<CampaignReward> = [];
-    var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0 };
+    var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0, desc: {[this.selectedLang]: this.finalRewardsNote} };
     this.campaign.weekConfs.unshift(newFinalRewards);
     this.reloadAllWeeks();
   }
@@ -493,10 +491,6 @@ export class RewardsComponent implements OnInit {
 
   toggleAddPeriodPopup() {
     this.isAddPeriodPopupOpen = !this.isAddPeriodPopupOpen;
-  }
-
-  toggleAddFinalRewardsPopup() {
-    this.isAddFinalRewardsPopupOpen = !this.isAddFinalRewardsPopupOpen;
   }
 
   toggleSaveFinalRewardsPopup() {

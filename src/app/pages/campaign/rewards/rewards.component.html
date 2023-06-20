@@ -253,7 +253,7 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddFinalRewardsPopup()">{{'saveFinalRewards' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleSaveFinalRewardsPopup()">{{'saveFinalRewards' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
                 <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteFinalRewardsdPopup()">{{'deleteFinalRewards' | translate}}</button>
             </mat-grid-tile>
@@ -313,7 +313,7 @@
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddRewardPopup()">{{'saveReward' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleSaveEditRewardPopup()">{{'saveReward' | translate}}</button>
                     <button mat-raised-button class="all-button" color="primary" (click)="toggleSpostaPopup()" (click)="generaNuoviValori()">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteRewardPopup()">{{'deleteReward' | translate}}</button>
@@ -449,19 +449,11 @@
     </div>
 </div>
 
-<div class="popup" *ngIf="isAddFinalRewardsPopupOpen">
-    <div class="popup-content">
-        <h2>Sei sicuro di voler salvare le modifiche?</h2>
-        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddFinalRewardsPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddFinalRewardsPopup()" (click)="saveFinalRewards()" (click)="goDefaultPage()">{{'save' | translate}}</button>
-    </div>
-</div>
-
 <div class="popup" *ngIf="isSaveFinalRewardsPopupOpen">
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveFinalRewardsPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveFinalRewardsPopup()" (click)="addFinalRewards()" (click)="goDefaultPage()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveFinalRewardsPopup()" (click)="saveFinalRewards()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -507,7 +499,7 @@
 
 <div class="popup" *ngIf="isSaveAndChangeLanguage1">
     <div class="popup-content">
-        <h2>Salvare e cambiare la lingua?</h2>
+        <h2>Salvare eventuali modifiche e cambiare la lingua?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup1()">{{'close' | translate}}</button>
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup1()" (click)="saveEditPeriod()" (click)="switchLanguage()" (click)="goEditPeriod(oggettoTmp, weekNumberTmp)">{{'save' | translate}}</button>
     </div>
@@ -515,7 +507,7 @@
 
 <div class="popup" *ngIf="isSaveAndChangeLanguage2">
     <div class="popup-content">
-        <h2>Salvare e cambiare la lingua?</h2>
+        <h2>Salvare eventuali modifiche e cambiare la lingua?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup2()">{{'close' | translate}}</button>
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup2()" (click)="addPeriod()" (click)="switchLanguage()" (click)="goEditPeriod(oggettoTmp, weekNumberTmp)">{{'save' | translate}}</button>
     </div>
@@ -523,7 +515,7 @@
 
 <div class="popup" *ngIf="isSaveAndChangeLanguage3">
     <div class="popup-content">
-        <h2>Salvare e cambiare la lingua?</h2>
+        <h2>Salvare eventuali modifiche e cambiare la lingua?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup3()">{{'close' | translate}}</button>
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup3()" (click)="saveFinalRewards()" (click)="switchLanguage()" (click)="goFinalRewards()">{{'save' | translate}}</button>
     </div>
@@ -531,7 +523,7 @@
 
 <div class="popup" *ngIf="isSaveAndChangeLanguage4">
     <div class="popup-content">
-        <h2>Salvare e cambiare la lingua?</h2>
+        <h2>Salvare eventuali modifiche e cambiare la lingua?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup4()">{{'close' | translate}}</button>
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup4()" (click)="saveEditReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, indiceTmp-1)">{{'save' | translate}}</button>
     </div>
@@ -539,7 +531,7 @@
 
 <div class="popup" *ngIf="isSaveAndChangeLanguage5">
     <div class="popup-content">
-        <h2>Salvare e cambiare la lingua?</h2>
+        <h2>Salvare eventuali modifiche e cambiare la lingua?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup5()">{{'close' | translate}}</button>
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup5()" (click)="addReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, campaign.weekConfs[weekNumberTmp].rewards.length-1)">{{'save' | translate}}</button>
     </div>
