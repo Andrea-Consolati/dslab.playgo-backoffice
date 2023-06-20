@@ -32,7 +32,7 @@ export class RewardsComponent implements OnInit {
   l = 1;
   viewEditPeriod: boolean = false;
   viewEditRewards: boolean = false;
-  viewNewPeriod: boolean = true;
+  viewNewPeriod: boolean = false;
   viewNewReward: boolean = false;
   viewFinalRewards: boolean = false;
   viewLoadCSV: boolean = false;
@@ -61,6 +61,14 @@ export class RewardsComponent implements OnInit {
   isSpostaPopupOpen: boolean = false;
   selectedPeriod: number;
   selectedPrize: number;
+  oggettoTmp: any;
+  isSaveAndChangeLanguage1: boolean = false;
+  isSaveAndChangeLanguage2: boolean = false;
+  isSaveAndChangeLanguage3: boolean = false;
+  isSaveAndChangeLanguage4: boolean = false;
+  isSaveAndChangeLanguage5: boolean = false;
+
+
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -280,6 +288,7 @@ export class RewardsComponent implements OnInit {
   }
 
   goEditPeriod(oggetto, weekNumber) {
+    this.viewEditPeriod=false;
     this.viewEditPeriod=true;
     this.viewEditRewards=false;
     this.viewNewPeriod=false;
@@ -289,10 +298,11 @@ export class RewardsComponent implements OnInit {
     this.dateTo = this.createDate(oggetto.dateTo);
     this.periodNote = oggetto.desc[this.selectedLang];
     this.weekNumberTmp = weekNumber;
+    this.oggettoTmp = oggetto;
   }
 
   saveEditPeriod() {
-    if (this.checkWeek0()) {
+    if (!this.checkWeek0()) {
       this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
       this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
       this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
@@ -301,9 +311,12 @@ export class RewardsComponent implements OnInit {
       this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
       this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
     }
+    this.checkDate()
   }
 
   goEditReward(oggetto, weekNumber, indice) {
+    this.clearValue();
+    this.viewEditRewards=false;
     this.viewEditPeriod=false;
     this.viewEditRewards=true;
     this.viewNewPeriod=false;
@@ -317,6 +330,7 @@ export class RewardsComponent implements OnInit {
     this.rewardNote = oggetto.rewardNote[this.selectedLang];
     this.indiceTmp = indice;
     this.weekNumberTmp = weekNumber;
+    this.oggettoTmp = oggetto;
   }
 
   saveEditReward() {
@@ -346,13 +360,14 @@ export class RewardsComponent implements OnInit {
   }
 
   deletePeriod() {
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
-    } else {
-      this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
+    if (this.checkDate()) {
+      if (!this.checkWeek0()) {
+       this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+      } else {
+        this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
+      }
+      this.ripristinaOrdinamentoPeriodi();
     }
-    this.reloadAllWeeks();
-    this.ripristinaOrdinamentoPeriodi();
   }
 
   deleteFinalRewards() {
@@ -399,10 +414,12 @@ export class RewardsComponent implements OnInit {
   }
 
   addPeriod() {
-    var newVoidRewardsArray: Array<CampaignReward> = [];
-    var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length };
-    this.campaign.weekConfs.push(newPeriod);
-    this.reloadAllWeeks();
+    if (this.checkDate()) {
+      var newVoidRewardsArray: Array<CampaignReward> = [];
+      var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length };
+      this.campaign.weekConfs.push(newPeriod);
+      this.reloadAllWeeks();
+    }
   }
 
   addFinalRewards() {
@@ -410,6 +427,10 @@ export class RewardsComponent implements OnInit {
     var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0 };
     this.campaign.weekConfs.unshift(newFinalRewards);
     this.reloadAllWeeks();
+  }
+
+  saveFinalRewards() {
+    this.campaign.weekConfs[0].desc[this.selectedLang] = this.finalRewardsNote;
   }
 
   switchLoadCSV() {
@@ -433,12 +454,12 @@ export class RewardsComponent implements OnInit {
     return date.toFormat("yyyy-MM-dd'T'HH:mm:ss");
   }
 
-  selezionaLinguaItaliana() {
-    this.selectedLang = "it";
-  }
-
-  selezionaLinguaInglese() {
-    this.selectedLang = "en";
+  switchLanguage() {
+    if (this.selectedLang == "it") {
+      this.selectedLang = "en";
+    } else {
+      this.selectedLang = "it";
+    }
   }
 
   reloadAllWeeks() {
@@ -506,6 +527,22 @@ export class RewardsComponent implements OnInit {
     this.isSpostaPopupOpen = !this.isSpostaPopupOpen;
   }
 
+  toggleSaveAndChangeLanguagePopup1() {
+    this.isSaveAndChangeLanguage1 = !this.isSaveAndChangeLanguage1;
+  }
+  toggleSaveAndChangeLanguagePopup2() {
+    this.isSaveAndChangeLanguage2 = !this.isSaveAndChangeLanguage2;
+  }
+  toggleSaveAndChangeLanguagePopup3() {
+    this.isSaveAndChangeLanguage3 = !this.isSaveAndChangeLanguage3;
+  }
+  toggleSaveAndChangeLanguagePopup4() {
+    this.isSaveAndChangeLanguage4 = !this.isSaveAndChangeLanguage4;
+  }
+  toggleSaveAndChangeLanguagePopup5() {
+    this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
+  }
+
   selectPeriod(i) {
     this.selectedPeriod = i;
   }
@@ -522,5 +559,34 @@ export class RewardsComponent implements OnInit {
   generaNuoviValori() {
     this.selectedPeriod = this.weekNumberTmp;
     this.selectedPrize = this.indiceTmp;
+  }
+
+  checkDate(): boolean {
+    if (this.dateTo < this.dateFrom) {
+      return true;
+    }
+    return false;
+  }
+
+  goDefaultPage() {
+    this.viewEditPeriod=false;
+    this.viewEditRewards=false;
+    this.viewNewPeriod=false;
+    this.viewNewReward=false;
+    this.viewFinalRewards = false;
+  }
+
+  checkIta(): boolean {
+    if (this.selectedLang == "it") {
+      return true;
+    }
+    return false;
+  }
+
+  checkEng() {
+    if (this.selectedLang == "en") {
+      return true;
+    }
+    return false;
   }
 }

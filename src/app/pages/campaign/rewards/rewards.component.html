@@ -151,9 +151,9 @@
                 <h2 class="full-width">{{'editPeriod' | translate}}</h2>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+                <button mat-button class="language-button" color="primary" [disabled]="checkIta()" (click)="toggleSaveAndChangeLanguagePopup1()">ITA</button>
                 |
-                <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+                <button mat-button class="language-button" color="warn" [disabled]="checkEng()" (click)="toggleSaveAndChangeLanguagePopup1()">ENG</button> 
             </mat-grid-tile>
         </mat-grid-list>
         <form class="edit-panel">
@@ -172,6 +172,7 @@
                 <mat-label>{{'periodNote' | translate}}</mat-label>
                 <input matInput id="period-note" name="editPeriodField3" [(ngModel)]="periodNote">
             </mat-form-field>
+            <p *ngIf="checkDate()" style="color: red;">La data di inizio deve precedere la data di fine!</p>
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
@@ -194,9 +195,9 @@
             <h2 class="full-width">{{'newPeriod' | translate}}</h2>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            <button mat-button class="language-button" color="primary" [disabled]="checkIta()" (click)="toggleSaveAndChangeLanguagePopup2()">ITA</button>
             |
-            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+            <button mat-button class="language-button" color="warn" [disabled]="checkEng()" (click)="toggleSaveAndChangeLanguagePopup2()">ENG</button> 
         </mat-grid-tile>
     </mat-grid-list>
     <form class="edit-panel">
@@ -215,6 +216,7 @@
             <mat-label>{{'periodNote' | translate}}</mat-label>
             <input matInput id="reward-description" name="newPeriodField3" [(ngModel)]="periodNote">
         </mat-form-field>
+        <p *ngIf="checkDate()" style="color: red;">La data di inizio deve precedere la data di fine!</p>
     </form>
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
@@ -236,9 +238,9 @@
             <h2 class="full-width">{{'finalRewards' | translate}}</h2>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            <button mat-button class="language-button" color="primary" [disabled]="checkIta()" (click)="toggleSaveAndChangeLanguagePopup3()">ITA</button>
             |
-            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+            <button mat-button class="language-button" color="warn" [disabled]="checkEng()" (click)="toggleSaveAndChangeLanguagePopup3()">ENG</button> 
         </mat-grid-tile>
     </mat-grid-list>
     <form class="edit-panel">
@@ -269,9 +271,9 @@
             <h2 class="full-width">{{'editReward' | translate}}</h2>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            <button mat-button class="language-button" color="primary" [disabled]="checkIta()" (click)="toggleSaveAndChangeLanguagePopup4()">ITA</button>
             |
-            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+            <button mat-button class="language-button" color="warn" [disabled]="checkEng()" (click)="toggleSaveAndChangeLanguagePopup4()">ENG</button> 
         </mat-grid-tile>
     </mat-grid-list>
         <form class="edit-panel">
@@ -330,15 +332,15 @@
             <h2 class="full-width">{{'newReward' | translate}}</h2>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="1">
-            <button mat-button class="language-button" color="primary" (click)="selezionaLinguaItaliana()">ITA</button>
+            <button mat-button class="language-button" color="primary" [disabled]="checkIta()" (click)="toggleSaveAndChangeLanguagePopup5()">ITA</button>
             |
-            <button mat-button class="language-button" color="warn" (click)="selezionaLinguaInglese()">ENG</button> 
+            <button mat-button class="language-button" color="warn" [disabled]="checkEng()" (click)="toggleSaveAndChangeLanguagePopup5()">ENG</button> 
         </mat-grid-tile>
     </mat-grid-list>
     <form class="edit-panel">
         <mat-form-field appearance="fill" class="input-full">
             <mat-label>{{'rewardDenomination' | translate}}</mat-label>
-            <input matInput id="reward-denomination" name="newRewardField6" [(ngModel)]="rewardDesc">
+            <input matInput id="reward-denomination" name="newRewardField6" [(ngModel)]="rewardDesc" required>
         </mat-form-field>
         <br>
         <label>{{'assignedTo' | translate}}:</label>
@@ -427,7 +429,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveEditPeriodPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveEditPeriodPopup()" (click)="saveEditPeriod()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveEditPeriodPopup()" (click)="saveEditPeriod()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -435,7 +437,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler eliminare il periodo?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteEditPerioddPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()" (click)="deletePeriod()" (click)="goNewPeriod()">{{'delete' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()" (click)="goDefaultPage()" (click)="goDefaultPage()">{{'delete' | translate}}</button>
     </div>
 </div>
 
@@ -443,7 +445,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddPeriodPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddPeriodPopup()" (click)="addPeriod()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddPeriodPopup()" (click)="addPeriod()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -451,7 +453,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddFinalRewardsPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddFinalRewardsPopup()" (click)="addFinalRewards()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddFinalRewardsPopup()" (click)="saveFinalRewards()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -459,7 +461,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveFinalRewardsPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveFinalRewardsPopup()" (click)="addFinalRewards()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveFinalRewardsPopup()" (click)="addFinalRewards()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -467,7 +469,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler eliminare i premi finali?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteFinalRewardsdPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteFinalRewardsdPopup()" (click)="deleteFinalRewards()" (click)="goNewPeriod()">{{'delete' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteFinalRewardsdPopup()" (click)="deleteFinalRewards()" (click)="goDefaultPage()">{{'delete' | translate}}</button>
     </div>
 </div>
 
@@ -475,7 +477,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveEditRewardPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveEditRewardPopup()" (click)="saveEditReward()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveEditRewardPopup()" (click)="saveEditReward()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -483,7 +485,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler eliminare il premio?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleDeleteRewardPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteRewardPopup()" (click)="deleteReward()" (click)="goNewPeriod()">{{'delete' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="warn" (click)="toggleDeleteRewardPopup()" (click)="deleteReward()" (click)="goDefaultPage()">{{'delete' | translate}}</button>
     </div>
 </div>
 
@@ -491,7 +493,7 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler salvare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleAddRewardPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddRewardPopup()" (click)="addReward()" (click)="goNewPeriod()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddRewardPopup()" (click)="addReward()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 
@@ -499,7 +501,47 @@
     <div class="popup-content">
         <h2>Sei sicuro di voler annullare le modifiche?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleCancelPopup()">{{'no' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleCancelPopup()" (click)="goNewPeriod()">{{'yes' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleCancelPopup()" (click)="goDefaultPage()">{{'yes' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveAndChangeLanguage1">
+    <div class="popup-content">
+        <h2>Salvare e cambiare la lingua?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup1()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup1()" (click)="saveEditPeriod()" (click)="switchLanguage()" (click)="goEditPeriod(oggettoTmp, weekNumberTmp)">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveAndChangeLanguage2">
+    <div class="popup-content">
+        <h2>Salvare e cambiare la lingua?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup2()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup2()" (click)="addPeriod()" (click)="switchLanguage()" (click)="goEditPeriod(oggettoTmp, weekNumberTmp)">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveAndChangeLanguage3">
+    <div class="popup-content">
+        <h2>Salvare e cambiare la lingua?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup3()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup3()" (click)="saveFinalRewards()" (click)="switchLanguage()" (click)="goFinalRewards()">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveAndChangeLanguage4">
+    <div class="popup-content">
+        <h2>Salvare e cambiare la lingua?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup4()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup4()" (click)="saveEditReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, indiceTmp-1)">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isSaveAndChangeLanguage5">
+    <div class="popup-content">
+        <h2>Salvare e cambiare la lingua?</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup5()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup5()" (click)="addReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, campaign.weekConfs[weekNumberTmp].rewards.length-1)">{{'save' | translate}}</button>
     </div>
 </div>
 <!-- END POPUPS -->
