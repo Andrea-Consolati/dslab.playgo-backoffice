@@ -548,3 +548,10 @@
 
 
 <!-- IN PROGRESS -->
+<mat-form-field appearance="fill" class="full-width">
+    <mat-label>{{ 'Seleziona nickname' }}</mat-label>
+        <mat-option *ngFor="let item of listUserCampaign; let i = index">
+            {{listUserCampaign[i].player.nickname}}
+        </mat-option>
+    <input matInput>
+</mat-form-field>

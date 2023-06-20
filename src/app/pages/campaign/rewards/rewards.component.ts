@@ -6,10 +6,13 @@ import { MatTableDataSource } from "@angular/material/table";
 import { TranslateService } from "@ngx-translate/core";
 import { DateTime } from "luxon";
 import { CampaignControllerService } from "src/app/core/api/generated/controllers/campaignController.service";
+import { ConsoleControllerService } from "src/app/core/api/generated/controllers/consoleController.service";
 import { CampaignReward } from "src/app/core/api/generated/model/campaignReward";
 import { CampaignWeekConf } from "src/app/core/api/generated/model/campaignWeekConf";
 import { CampaignClass } from "src/app/shared/classes/campaing-class";
+import { PlayerCampaignClass } from "src/app/shared/classes/player-campaing-class";
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
+import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constants";
 
 @Component({
   selector: "app-rewards",
@@ -67,16 +70,21 @@ export class RewardsComponent implements OnInit {
   isSaveAndChangeLanguage3: boolean = false;
   isSaveAndChangeLanguage4: boolean = false;
   isSaveAndChangeLanguage5: boolean = false;
+  listUserCampaign: PlayerCampaignClass[];
+  pageSizesOnTable:20;
+  territoryId: string;
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
     private formBuilder: FormBuilder,
     private translate: TranslateService,
     private campaignService: CampaignControllerService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private playerService: ConsoleControllerService
   ) {}
 
   ngOnInit(): void {
+    this.territoryId = localStorage.getItem(TERRITORY_ID_LOCAL_STORAGE_KEY);
     this.validatingForm = this.formBuilder.group({
       weeks: new FormControl("", [Validators.required]),
       rewards: new FormControl("", [Validators.required]),
@@ -90,6 +98,25 @@ export class RewardsComponent implements OnInit {
         this.campaign = result;
         this.setTableData();
       });
+      try {
+        this.playerService.
+        searchPlayersByTerritoryUsingGET({
+          page: 0,
+          size: this.pageSizesOnTable,
+          territoryId :this.territoryId
+        }
+          )
+          .subscribe(
+            (res) => {
+              this.listUserCampaign = res.content;
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
+      } catch (error) {
+        console.error(error);
+      }
   }
 
   onNoClick(event: any): void {
