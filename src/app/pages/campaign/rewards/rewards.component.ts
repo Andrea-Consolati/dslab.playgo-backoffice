@@ -58,6 +58,7 @@ export class RewardsComponent implements OnInit {
   isAddRewardPopupOpen: boolean = false;
   isCancelPopupOpen: boolean = false;
   isSpostaPopupOpen: boolean = false;
+  isChangeModule: boolean = false;
   selectedPeriod: number;
   selectedPrize: number;
   oggettoTmp: any;
@@ -537,6 +538,10 @@ export class RewardsComponent implements OnInit {
     this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
   }
 
+  toggleChangeModulePopup() {
+    this.isChangeModule = !this.isChangeModule;
+  }
+
   selectPeriod(i) {
     this.selectedPeriod = i;
   }
@@ -582,5 +587,29 @@ export class RewardsComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  checkIsDefaultPage(identificatore: string) {
+    if ((this.viewEditPeriod==false) && (this.viewEditRewards==false) && (this.viewNewPeriod==false) && (this.viewNewReward==false) && (this.viewFinalRewards==false)) {
+      if (identificatore == "newPeriod") {
+        this.goNewPeriod();
+      } else if (identificatore == "finalRewards") {
+        this.goFinalRewards();
+      } else if (identificatore == "editPeriod") {
+        this.goEditPeriod(this.oggettoTmp, this.weekNumberTmp);
+      } else if (identificatore == "newReward") {
+        this.goNewReward(this.weekNumberTmp);
+      } else if (identificatore == "editReward") {
+        this.goEditReward(this.oggettoTmp, this.weekNumberTmp, this.indiceTmp);
+      }
+    } else {
+      this.toggleChangeModulePopup();
+    }
+  }
+
+  inizializzaVariabili(oggetto, weekNumber, indice) {
+    this.oggettoTmp = oggetto;
+    this.weekNumberTmp = weekNumber;
+    this.indiceTmp = indice;
   }
 }

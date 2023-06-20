@@ -95,7 +95,7 @@
                         <ul>
                             <li class="titleValue"><time>{{'id' | translate}}:</time> {{element.weekNumber}}</li>
                             <li class="titleValue">{{'finalRewards' | translate}}</li>
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="goFinalRewards()">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="checkIsDefaultPage('finalRewards')">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </ul>
@@ -105,7 +105,7 @@
                             <li class="titleValue"><time>{{'id' | translate}}:</time> {{element.weekNumber}}</li>
                             <li class="titleValue"><time>{{'dateFrom' | translate}}:</time> {{fromTimestampToDate(element.dateFrom)}} </li>
                             <li class="titleValue"><time>{{'dateTo' | translate}}:</time> {{fromTimestampToDate(element.dateTo)}} </li>
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="goEditPeriod(element, element.weekNumber)">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="inizializzaVariabili(element, element.weekNumber, undefined)" (click)="checkIsDefaultPage('editPeriod')">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </ul>
@@ -113,13 +113,13 @@
                     <div class="content">
                         <p *ngFor="let item of element.rewards;let i = index">
                             {{i+1}}°: {{item.desc[selectedLang]}}
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goEditReward(item, element.weekNumber, i)">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="inizializzaVariabili(item, element.weekNumber, i)" (click)="checkIsDefaultPage('editReward')">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </p>
                         <p>
                             {{'newReward' | translate}}
-                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon"  (click)="goNewReward(element.weekNumber)">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a edit icon" (click)="inizializzaVariabili(undefined, element.weekNumber, undefined)" (click)="checkIsDefaultPage('newReward')">
                                 <mat-icon>add</mat-icon>
                             </button>
                         </p>
@@ -135,7 +135,7 @@
 </form>
 <mat-grid-list cols="1" rowHeight="45px">
     <mat-grid-tile [colspan]="1" [rowspan]="1">
-        <button mat-raised-button class="all-button" color="primary" (click)="goNewPeriod()">+ {{'newPeriod' | translate}}</button>
+        <button mat-raised-button class="all-button" color="primary" (click)="checkIsDefaultPage('newPeriod')">+ {{'newPeriod' | translate}}</button>
         <button mat-raised-button [disabled]="checkWeek0()" class="all-button" style="background-color: lightgray;" (click)="addFinalRewards()">+ {{'finalRewards' | translate}}</button>
     </mat-grid-tile>
 </mat-grid-list>
@@ -534,6 +534,13 @@
         <h2>Salvare eventuali modifiche e cambiare la lingua?</h2>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup5()">{{'close' | translate}}</button>
         <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup5()" (click)="addReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, campaign.weekConfs[weekNumberTmp].rewards.length-1)">{{'save' | translate}}</button>
+    </div>
+</div>
+
+<div class="popup" *ngIf="isChangeModule">
+    <div class="popup-content">
+        <h2>Prima di cambiare modulo devi chiudere quello attualmente aperto!</h2>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleChangeModulePopup()">{{'close' | translate}}</button>
     </div>
 </div>
 <!-- END POPUPS -->
