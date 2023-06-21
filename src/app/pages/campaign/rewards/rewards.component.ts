@@ -21,6 +21,8 @@ import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constan
 })
 
 export class RewardsComponent implements OnInit {
+
+//VARIABILI
   selectedLang: string = "it";
   campaign: CampaignClass;
   dataSource: MatTableDataSource<any>;
@@ -75,6 +77,7 @@ export class RewardsComponent implements OnInit {
   risultatiFiltrati = [];
   myControl = new FormControl();
 
+//METODI DI BASE
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
     private formBuilder: FormBuilder,
@@ -287,23 +290,7 @@ export class RewardsComponent implements OnInit {
     return item.includes('error');
   }
 
-  checkWeek0() {
-    return this.campaign?.weekConfs?.some(week => week.weekNumber===0);
-  }
-
-  checkSponsor(sponsorName: string, sponsorDesc: string, sponsorWebsite: string) {
-    if (!(sponsorName === undefined) && (sponsorName.length > 0)) {
-      return true;
-    }
-    if (!(sponsorDesc === undefined) && (sponsorDesc.length > 0)) {
-      return true;
-    }
-    if (!(sponsorWebsite === undefined) && (sponsorWebsite.length > 0)) {
-      return true;
-    }
-    return false;
-  }
-
+//GESTIONE VISUALIZZAZIONE PAGINE
   goFinalRewards() {
     this.clearValue();
     this.viewFinalRewards = true;
@@ -328,20 +315,6 @@ export class RewardsComponent implements OnInit {
     this.oggettoTmp = oggetto;
   }
 
-  saveEditPeriod() {
-    if (!this.checkDate()) {
-      if (this.checkWeek0()) {
-          this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-          this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
-          this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
-        } else {
-          this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-          this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
-          this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
-        }
-    }
-  }
-
   goEditReward(oggetto, weekNumber, indice) {
     this.clearValue();
     this.viewEditRewards=false;
@@ -359,59 +332,6 @@ export class RewardsComponent implements OnInit {
     this.indiceTmp = indice;
     this.weekNumberTmp = weekNumber;
     this.oggettoTmp = oggetto;
-  }
-
-  saveEditReward() {
-    if(this.checkDesc()){
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
-    }
-   }
-  }
-
-  deleteReward() {
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.splice(this.indiceTmp, 1);
-    }
-  }
-
-  deletePeriod() {
-      if (this.checkWeek0()) {
-       this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
-      } else {
-        this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
-      }
-      this.setTableData();
-      this.ripristinaOrdinamentoPeriodi();
-  }
-
-  deleteFinalRewards() {
-    this.campaign.weekConfs.splice(0, 1);
-    this.setTableData();
-  }
-
-  ripristinaOrdinamentoPeriodi() {
-    for (var i = 0; i <= this.campaign.weekConfs.length; i++) {
-      if (this.checkWeek0()) {
-        this.campaign.weekConfs[i].weekNumber = i;
-      } else {
-        this.campaign.weekConfs[i].weekNumber = i + 1;
-      }
-    }
   }
 
   goNewPeriod() {
@@ -433,163 +353,190 @@ export class RewardsComponent implements OnInit {
     this.weekNumberTmp = weekNumber;
   }
 
-  addReward() {
-    if(this.checkDesc()){
-    this.oggettoTmp = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoTmp);
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoTmp);
-    }
-   }
-  }
-
-  addPeriod() {
-    if (!this.checkDate()) {
-      var newVoidRewardsArray: Array<CampaignReward> = [];
-      var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
-      this.campaign.weekConfs.push(newPeriod);
-      this.setTableData();
-    }
-  }
-
-  addFinalRewards() {
-    var newVoidRewardsArray: Array<CampaignReward> = [];
-    var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0, desc: {[this.selectedLang]: this.finalRewardsNote} };
-    this.campaign.weekConfs.unshift(newFinalRewards);
-    this.setTableData();
-  }
-
-  saveFinalRewards() {
-    this.campaign.weekConfs[0].desc[this.selectedLang] = this.finalRewardsNote;
+  goDefaultPage() {
+    this.viewEditPeriod=false;
+    this.viewEditRewards=false;
+    this.viewNewPeriod=false;
+    this.viewNewReward=false;
+    this.viewFinalRewards = false;
   }
 
   switchLoadCSV() {
     this.viewLoadCSV = !this.viewLoadCSV;
   }
 
-  fromDateTimeToLong(dateString: string): number {
-    if (dateString.length === "yyyy-mm-ddThh:mm:ss".length) {
-      const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm:ss", {
-      });
-      return newDate.toMillis();
+//GESTIONE MODIFICHE
+saveEditPeriod() {
+  if (!this.checkDate()) {
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+      this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
+      this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
     } else {
-      const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm", {
-      });
-      return newDate.toMillis();
+      this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
+      this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
     }
   }
+}
 
-  createDate(timestamp: number): string {
-    const date = DateTime.fromMillis(timestamp);
-    return date.toFormat("yyyy-MM-dd'T'HH:mm:ss");
-  }
-
-  switchLanguage() {
-    if (this.selectedLang == "it") {
-      this.selectedLang = "en";
+saveEditReward() {
+  if (!this.checkDesc()) {
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
+      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
     } else {
-      this.selectedLang = "it";
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
     }
   }
+}
 
-  clearValue() {
-    this.rewardDesc = undefined;
-    this.nickname = undefined;
-    this.sponsorName = undefined;
-    this.sponsorDesc = undefined;
-    this.sponsorWebsite = undefined;
-    this.rewardNote = undefined;
-    this.periodNote = undefined;
-    this.finalRewardsNote = undefined;
-    this.dateFrom = undefined;
-    this.dateTo = undefined;
+saveFinalRewards() {
+  this.campaign.weekConfs[0].desc[this.selectedLang] = this.finalRewardsNote;
+}
+
+//GESTIONE AGGIUNTE
+addReward() {
+  if (!this.checkDesc()) {
+    this.oggettoTmp = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoTmp);
+    } else {
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoTmp);
+    }
+  }
+}
+
+addPeriod() {
+  if (!this.checkDate()) {
+    var newVoidRewardsArray: Array<CampaignReward> = [];
+    var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
+    this.campaign.weekConfs.push(newPeriod);
+    this.setTableData();
+  }
+}
+
+addFinalRewards() {
+  var newVoidRewardsArray: Array<CampaignReward> = [];
+  var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0, desc: {[this.selectedLang]: this.finalRewardsNote} };
+  this.campaign.weekConfs.unshift(newFinalRewards);
+  this.setTableData();
+}
+
+//GESTIONE ELIMINAZIONI
+deleteReward() {
+  if (this.checkWeek0()) {
+    this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
+  } else {
+    this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.splice(this.indiceTmp, 1);
+  }
+}
+
+deletePeriod() {
+    if (this.checkWeek0()) {
+     this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+    } else {
+      this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
+    }
+    this.setTableData();
+    this.ripristinaOrdinamentoPeriodi();
+}
+
+deleteFinalRewards() {
+  this.campaign.weekConfs.splice(0, 1);
+  this.setTableData();
+}
+
+//GESTIONE POPUP
+toggleSaveEditPeriodPopup() {
+  this.isSaveEditPeriodPopupOpen = !this.isSaveEditPeriodPopupOpen;
+}
+
+toggleDeleteEditPerioddPopup() {
+  this.isDeleteEditPeriodPopupOpen = !this.isDeleteEditPeriodPopupOpen;
+}
+
+toggleAddPeriodPopup() {
+  this.isAddPeriodPopupOpen = !this.isAddPeriodPopupOpen;
+}
+
+toggleSaveFinalRewardsPopup() {
+  this.isSaveFinalRewardsPopupOpen = !this.isSaveFinalRewardsPopupOpen;
+}
+
+toggleDeleteFinalRewardsdPopup() {
+  this.isDeleteFinalRewardsPopupOpen = !this.isDeleteFinalRewardsPopupOpen;
+}
+
+toggleDeleteRewardPopup() {
+  this.isDeleteRewardPopupOpen = !this.isDeleteRewardPopupOpen;
+}
+
+toggleSaveEditRewardPopup() {
+  this.isSaveEditRewardPopupOpen = !this.isSaveEditRewardPopupOpen;
+}
+
+toggleAddRewardPopup() {
+  this.isAddRewardPopupOpen = !this.isAddRewardPopupOpen;
+}
+
+toggleCancelPopup() {
+  this.isCancelPopupOpen = !this.isCancelPopupOpen;
+}
+
+toggleSpostaPopup() {
+  this.isSpostaPopupOpen = !this.isSpostaPopupOpen;
+}
+
+toggleSaveAndChangeLanguagePopup1() {
+  this.isSaveAndChangeLanguage1 = !this.isSaveAndChangeLanguage1;
+}
+
+toggleSaveAndChangeLanguagePopup2() {
+  this.isSaveAndChangeLanguage2 = !this.isSaveAndChangeLanguage2;
+}
+
+toggleSaveAndChangeLanguagePopup3() {
+  this.isSaveAndChangeLanguage3 = !this.isSaveAndChangeLanguage3;
+}
+
+toggleSaveAndChangeLanguagePopup4() {
+  this.isSaveAndChangeLanguage4 = !this.isSaveAndChangeLanguage4;
+}
+
+toggleSaveAndChangeLanguagePopup5() {
+  this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
+}
+
+toggleChangeModulePopup() {
+  this.isChangeModule = !this.isChangeModule;
+}
+
+//CONTROLLI
+  checkWeek0() {
+    return this.campaign?.weekConfs?.some(week => week.weekNumber===0);
   }
 
-  clearNickname() {
-    this.nickname = undefined;
-  }
-
-  toggleSaveEditPeriodPopup() {
-    this.isSaveEditPeriodPopupOpen = !this.isSaveEditPeriodPopupOpen;
-  }
-
-  toggleDeleteEditPerioddPopup() {
-    this.isDeleteEditPeriodPopupOpen = !this.isDeleteEditPeriodPopupOpen;
-  }
-
-  toggleAddPeriodPopup() {
-    this.isAddPeriodPopupOpen = !this.isAddPeriodPopupOpen;
-  }
-
-  toggleSaveFinalRewardsPopup() {
-    this.isSaveFinalRewardsPopupOpen = !this.isSaveFinalRewardsPopupOpen;
-  }
-
-  toggleDeleteFinalRewardsdPopup() {
-    this.isDeleteFinalRewardsPopupOpen = !this.isDeleteFinalRewardsPopupOpen;
-  }
-
-  toggleDeleteRewardPopup() {
-    this.isDeleteRewardPopupOpen = !this.isDeleteRewardPopupOpen;
-  }
-
-  toggleSaveEditRewardPopup() {
-    this.isSaveEditRewardPopupOpen = !this.isSaveEditRewardPopupOpen;
-  }
-
-  toggleAddRewardPopup() {
-    this.isAddRewardPopupOpen = !this.isAddRewardPopupOpen;
-  }
-
-  toggleCancelPopup() {
-    this.isCancelPopupOpen = !this.isCancelPopupOpen;
-  }
-
-  toggleSpostaPopup() {
-    this.isSpostaPopupOpen = !this.isSpostaPopupOpen;
-  }
-
-  toggleSaveAndChangeLanguagePopup1() {
-    this.isSaveAndChangeLanguage1 = !this.isSaveAndChangeLanguage1;
-  }
-
-  toggleSaveAndChangeLanguagePopup2() {
-    this.isSaveAndChangeLanguage2 = !this.isSaveAndChangeLanguage2;
-  }
-
-  toggleSaveAndChangeLanguagePopup3() {
-    this.isSaveAndChangeLanguage3 = !this.isSaveAndChangeLanguage3;
-  }
-
-  toggleSaveAndChangeLanguagePopup4() {
-    this.isSaveAndChangeLanguage4 = !this.isSaveAndChangeLanguage4;
-  }
-
-  toggleSaveAndChangeLanguagePopup5() {
-    this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
-  }
-
-  toggleChangeModulePopup() {
-    this.isChangeModule = !this.isChangeModule;
-  }
-
-  selectPeriod(i) {
-    this.selectedPeriod = i;
-  }
-
-  selectReward(i) {
-    this.selectedPrize = i;
-  }
-
-  sposta() {
-    this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
-    this.deleteReward();
-  }
-
-  generaNuoviValori() {
-    this.selectedPeriod = this.weekNumberTmp;
-    this.selectedPrize = this.indiceTmp;
+  checkSponsor(sponsorName: string, sponsorDesc: string, sponsorWebsite: string) {
+    if (!(sponsorName === undefined) && (sponsorName.length > 0)) {
+      return true;
+    }
+    if (!(sponsorDesc === undefined) && (sponsorDesc.length > 0)) {
+      return true;
+    }
+    if (!(sponsorWebsite === undefined) && (sponsorWebsite.length > 0)) {
+      return true;
+    }
+    return false;
   }
 
   checkDate(): boolean {
@@ -597,14 +544,6 @@ export class RewardsComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  goDefaultPage() {
-    this.viewEditPeriod=false;
-    this.viewEditRewards=false;
-    this.viewNewPeriod=false;
-    this.viewNewReward=false;
-    this.viewFinalRewards = false;
   }
 
   checkIta(): boolean {
@@ -639,6 +578,84 @@ export class RewardsComponent implements OnInit {
     }
   }
 
+  checkDesc() {
+    if (this.rewardDesc.length<1) {
+      return true;
+    }
+    return false;
+  }
+
+  //METODI SUPPORTO
+  ripristinaOrdinamentoPeriodi() {
+    for (var i = 0; i <= this.campaign.weekConfs.length; i++) {
+      if (this.checkWeek0()) {
+        this.campaign.weekConfs[i].weekNumber = i;
+      } else {
+        this.campaign.weekConfs[i].weekNumber = i + 1;
+      }
+    }
+  }
+
+  fromDateTimeToLong(dateString: string): number {
+    if (dateString.length === "yyyy-mm-ddThh:mm:ss".length) {
+      const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm:ss", {
+      });
+      return newDate.toMillis();
+    } else {
+      const newDate = DateTime.fromFormat(dateString, "yyyy-MM-dd'T'HH:mm", {
+      });
+      return newDate.toMillis();
+    }
+  }
+
+  createDate(timestamp: number): string {
+    const date = DateTime.fromMillis(timestamp);
+    return date.toFormat("yyyy-MM-dd'T'HH:mm:ss");
+  }
+
+  switchLanguage() {
+    if (this.selectedLang == "it") {
+      this.selectedLang = "en";
+    } else {
+      this.selectedLang = "it";
+    }
+  }
+
+  clearValue() {
+    this.rewardDesc = "";
+    this.nickname = "";
+    this.sponsorName = "";
+    this.sponsorDesc = "";
+    this.sponsorWebsite = "";
+    this.rewardNote = "";
+    this.periodNote = "";
+    this.finalRewardsNote = "";
+    this.dateFrom = "";
+    this.dateTo = "";
+  }
+
+  clearNickname() {
+    this.nickname = "";
+  }
+
+  selectPeriod(i) {
+    this.selectedPeriod = i;
+  }
+
+  selectReward(i) {
+    this.selectedPrize = i;
+  }
+
+  sposta() {
+    this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+    this.deleteReward();
+  }
+
+  generaNuoviValori() {
+    this.selectedPeriod = this.weekNumberTmp;
+    this.selectedPrize = this.indiceTmp;
+  }
+
   inizializzaVariabili(oggetto, weekNumber, indice) {
     this.oggettoTmp = oggetto;
     this.weekNumberTmp = weekNumber;
@@ -652,18 +669,7 @@ export class RewardsComponent implements OnInit {
   }
 
   changeName(nome) {
-    this.nickname = nome+" ";
+    this.nickname = nome + " ";
     this.cercaPerNome();
-  }
-
-  checkDesc(){
-    if(this.rewardDesc.length<1){
-
-      return true;
-    }
-    else 
-    return false;
-
-
   }
 }

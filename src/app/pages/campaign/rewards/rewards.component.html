@@ -16,8 +16,6 @@
 </div>
 <!-- END HEADER BAR -->
 
-
-
 <!-- LOAD CSV -->
 <form *ngIf="viewLoadCSV" [formGroup]="validatingForm" class="norm-border">
     <mat-grid-list cols="8" rowHeight="45px">
@@ -76,8 +74,6 @@
     </mat-grid-list>
 </form>
 <!-- END LOAD CSV -->
-
-
 
 <div class="tutto">
 <!-- TABLE -->
@@ -142,8 +138,6 @@
 </form>
 <!-- END TABLE -->
 
-
-
 <!-- EDIT PERIOD SYSTEM -->
     <form class="right-column" *ngIf="viewEditPeriod">
         <mat-grid-list cols="8" rowHeight="45px">
@@ -177,7 +171,7 @@
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleSaveEditPeriodPopup()">{{'savePeriod' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit" [disabled]="checkDate()" (click)="toggleSaveEditPeriodPopup()">{{'savePeriod' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteEditPerioddPopup()">{{'deletePeriod' | translate}}</button>
                 </mat-grid-tile>
@@ -185,8 +179,6 @@
         </div>
     </form>
 <!-- END EDIT PERIOD SYSTEM -->
-
-
 
 <!-- NEW PERIOD SYSTEM -->
 <form class="right-column" *ngIf="viewNewPeriod">
@@ -229,8 +221,6 @@
 </form>
 <!-- END NEW PERIOD SYSTEM -->
 
-
-
 <!-- FINAL REWARDS -->
 <form class="right-column" *ngIf="viewFinalRewards">
     <mat-grid-list cols="8" rowHeight="45px">
@@ -262,8 +252,6 @@
     
 </form>
 <!-- END FINAL REWARDS -->
-
-
 
 <!-- EDIT REWARDS SYSTEM -->
 <form class="right-column" *ngIf="viewEditRewards">
@@ -327,8 +315,6 @@
     </form>
 <!-- END EDIT REWARDS SYSTEM -->
 
-
-
 <!-- NEW REWARD SYSTEM -->
 <form class="right-column" *ngIf="viewNewReward">
     <mat-grid-list cols="8" rowHeight="45px">
@@ -376,7 +362,6 @@
             <input matInput id="reward-note" name="newRewardField6" [(ngModel)]="rewardNote">
         </mat-form-field>
         <p *ngIf="checkDesc()" style="color: red;">Manca la descrizione</p>
-
     </form>
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
@@ -389,8 +374,6 @@
 </form>
 <!-- END NEW REWARD SYSTEM -->
 </div>
-
-
 
 <!-- SPOSTA -->
 <div class="popup" *ngIf="isSpostaPopupOpen">
@@ -431,8 +414,6 @@
     </div>
 </div>
 <!-- END SPOSTA -->
-
-
 
 <!-- POPUPS -->
 <div class="popup" *ngIf="isSaveEditPeriodPopupOpen">
@@ -614,7 +595,5 @@
     </div>
 </div>
 <!-- END POPUPS -->
-
-
 
 <!-- IN PROGRESS -->
