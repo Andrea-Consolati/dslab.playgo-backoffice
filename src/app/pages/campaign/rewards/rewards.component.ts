@@ -21,7 +21,6 @@ import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constan
 })
 
 export class RewardsComponent implements OnInit {
-
 //VARIABILI
   selectedLang: string = "it";
   campaign: CampaignClass;
@@ -61,7 +60,7 @@ export class RewardsComponent implements OnInit {
   isDeleteRewardPopupOpen: boolean = false;
   isAddRewardPopupOpen: boolean = false;
   isCancelPopupOpen: boolean = false;
-  isSpostaPopupOpen: boolean = false;
+  isMovePopupOpen: boolean = false;
   isChangeModule: boolean = false;
   selectedPeriod: number;
   selectedPrize: number;
@@ -366,160 +365,160 @@ export class RewardsComponent implements OnInit {
   }
 
 //GESTIONE MODIFICHE
-saveEditPeriod() {
-  if (!this.checkDate()) {
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-      this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
-      this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
-      this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
-      this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
+  saveEditPeriod() {
+    if (!this.checkDate()) {
+      if (this.checkWeek0()) {
+        this.campaign.weekConfs[this.weekNumberTmp].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+        this.campaign.weekConfs[this.weekNumberTmp].dateTo = this.fromDateTimeToLong(this.dateTo);
+        this.campaign.weekConfs[this.weekNumberTmp].desc[this.selectedLang] = this.periodNote;
+      } else {
+        this.campaign.weekConfs[this.weekNumberTmp - 1].dateFrom = this.fromDateTimeToLong(this.dateFrom);
+        this.campaign.weekConfs[this.weekNumberTmp - 1].dateTo = this.fromDateTimeToLong(this.dateTo);
+        this.campaign.weekConfs[this.weekNumberTmp - 1].desc[this.selectedLang] = this.periodNote;
+      }
     }
   }
-}
 
-saveEditReward() {
-  if (!this.checkDesc()) {
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-      this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+  saveEditReward() {
+    if (!this.checkDesc()) {
+      if (this.checkWeek0()) {
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+      } else {
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+      }
     }
   }
-}
 
-saveFinalRewards() {
-  this.campaign.weekConfs[0].desc[this.selectedLang] = this.finalRewardsNote;
-}
+  saveFinalRewards() {
+    this.campaign.weekConfs[0].desc[this.selectedLang] = this.finalRewardsNote;
+  }
 
 //GESTIONE AGGIUNTE
-addReward() {
-  if (!this.checkDesc()) {
-    this.oggettoTmp = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
-    if (this.checkWeek0()) {
-      this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoTmp);
-    } else {
-      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoTmp);
+  addReward() {
+    if (!this.checkDesc()) {
+      this.oggettoTmp = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
+      if (this.checkWeek0()) {
+        this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoTmp);
+      } else {
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoTmp);
+      }
     }
   }
-}
 
-addPeriod() {
-  if (!this.checkDate()) {
+  addPeriod() {
+    if (!this.checkDate()) {
+      var newVoidRewardsArray: Array<CampaignReward> = [];
+      var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
+      this.campaign.weekConfs.push(newPeriod);
+      this.setTableData();
+    }
+  }
+
+  addFinalRewards() {
     var newVoidRewardsArray: Array<CampaignReward> = [];
-    var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
-    this.campaign.weekConfs.push(newPeriod);
+    var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0, desc: {[this.selectedLang]: this.finalRewardsNote} };
+    this.campaign.weekConfs.unshift(newFinalRewards);
     this.setTableData();
   }
-}
-
-addFinalRewards() {
-  var newVoidRewardsArray: Array<CampaignReward> = [];
-  var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0, desc: {[this.selectedLang]: this.finalRewardsNote} };
-  this.campaign.weekConfs.unshift(newFinalRewards);
-  this.setTableData();
-}
 
 //GESTIONE ELIMINAZIONI
-deleteReward() {
-  if (this.checkWeek0()) {
-    this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
-  } else {
-    this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.splice(this.indiceTmp, 1);
-  }
-}
-
-deletePeriod() {
+  deleteReward() {
     if (this.checkWeek0()) {
-     this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
+      this.campaign.weekConfs[this.weekNumberTmp].rewards.splice(this.indiceTmp, 1);
+    } else {
+      this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.splice(this.indiceTmp, 1);
+    }
+  }
+
+  deletePeriod() {
+    if (this.checkWeek0()) {
+      this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
     } else {
       this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
     }
     this.setTableData();
     this.ripristinaOrdinamentoPeriodi();
-}
+  }
 
-deleteFinalRewards() {
-  this.campaign.weekConfs.splice(0, 1);
-  this.setTableData();
-}
+  deleteFinalRewards() {
+    this.campaign.weekConfs.splice(0, 1);
+    this.setTableData();
+  }
 
 //GESTIONE POPUP
-toggleSaveEditPeriodPopup() {
-  this.isSaveEditPeriodPopupOpen = !this.isSaveEditPeriodPopupOpen;
-}
+  toggleSaveEditPeriodPopup() {
+    this.isSaveEditPeriodPopupOpen = !this.isSaveEditPeriodPopupOpen;
+  }
 
-toggleDeleteEditPerioddPopup() {
-  this.isDeleteEditPeriodPopupOpen = !this.isDeleteEditPeriodPopupOpen;
-}
+  toggleDeleteEditPerioddPopup() {
+    this.isDeleteEditPeriodPopupOpen = !this.isDeleteEditPeriodPopupOpen;
+  }
 
-toggleAddPeriodPopup() {
-  this.isAddPeriodPopupOpen = !this.isAddPeriodPopupOpen;
-}
+  toggleAddPeriodPopup() {
+    this.isAddPeriodPopupOpen = !this.isAddPeriodPopupOpen;
+  }
 
-toggleSaveFinalRewardsPopup() {
-  this.isSaveFinalRewardsPopupOpen = !this.isSaveFinalRewardsPopupOpen;
-}
+  toggleSaveFinalRewardsPopup() {
+    this.isSaveFinalRewardsPopupOpen = !this.isSaveFinalRewardsPopupOpen;
+  }
 
-toggleDeleteFinalRewardsdPopup() {
-  this.isDeleteFinalRewardsPopupOpen = !this.isDeleteFinalRewardsPopupOpen;
-}
+  toggleDeleteFinalRewardsdPopup() {
+    this.isDeleteFinalRewardsPopupOpen = !this.isDeleteFinalRewardsPopupOpen;
+  }
 
-toggleDeleteRewardPopup() {
-  this.isDeleteRewardPopupOpen = !this.isDeleteRewardPopupOpen;
-}
+  toggleDeleteRewardPopup() {
+    this.isDeleteRewardPopupOpen = !this.isDeleteRewardPopupOpen;
+  }
 
-toggleSaveEditRewardPopup() {
-  this.isSaveEditRewardPopupOpen = !this.isSaveEditRewardPopupOpen;
-}
+  toggleSaveEditRewardPopup() {
+    this.isSaveEditRewardPopupOpen = !this.isSaveEditRewardPopupOpen;
+  }
 
-toggleAddRewardPopup() {
-  this.isAddRewardPopupOpen = !this.isAddRewardPopupOpen;
-}
+  toggleAddRewardPopup() {
+    this.isAddRewardPopupOpen = !this.isAddRewardPopupOpen;
+  }
 
-toggleCancelPopup() {
-  this.isCancelPopupOpen = !this.isCancelPopupOpen;
-}
+  toggleCancelPopup() {
+    this.isCancelPopupOpen = !this.isCancelPopupOpen;
+  }
 
-toggleSpostaPopup() {
-  this.isSpostaPopupOpen = !this.isSpostaPopupOpen;
-}
+  toggleMovePopup() {
+    this.isMovePopupOpen = !this.isMovePopupOpen;
+  }
 
-toggleSaveAndChangeLanguagePopup1() {
-  this.isSaveAndChangeLanguage1 = !this.isSaveAndChangeLanguage1;
-}
+  toggleSaveAndChangeLanguagePopup1() {
+    this.isSaveAndChangeLanguage1 = !this.isSaveAndChangeLanguage1;
+  }
 
-toggleSaveAndChangeLanguagePopup2() {
-  this.isSaveAndChangeLanguage2 = !this.isSaveAndChangeLanguage2;
-}
+  toggleSaveAndChangeLanguagePopup2() {
+    this.isSaveAndChangeLanguage2 = !this.isSaveAndChangeLanguage2;
+  }
 
-toggleSaveAndChangeLanguagePopup3() {
-  this.isSaveAndChangeLanguage3 = !this.isSaveAndChangeLanguage3;
-}
+  toggleSaveAndChangeLanguagePopup3() {
+    this.isSaveAndChangeLanguage3 = !this.isSaveAndChangeLanguage3;
+  }
 
-toggleSaveAndChangeLanguagePopup4() {
-  this.isSaveAndChangeLanguage4 = !this.isSaveAndChangeLanguage4;
-}
+  toggleSaveAndChangeLanguagePopup4() {
+    this.isSaveAndChangeLanguage4 = !this.isSaveAndChangeLanguage4;
+  }
 
-toggleSaveAndChangeLanguagePopup5() {
-  this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
-}
+  toggleSaveAndChangeLanguagePopup5() {
+    this.isSaveAndChangeLanguage5 = !this.isSaveAndChangeLanguage5;
+  }
 
-toggleChangeModulePopup() {
-  this.isChangeModule = !this.isChangeModule;
-}
+  toggleChangeModulePopup() {
+    this.isChangeModule = !this.isChangeModule;
+  }
 
 //CONTROLLI
   checkWeek0() {
@@ -646,7 +645,7 @@ toggleChangeModulePopup() {
     this.selectedPrize = i;
   }
 
-  sposta() {
+  move() {
     this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
     this.deleteReward();
   }

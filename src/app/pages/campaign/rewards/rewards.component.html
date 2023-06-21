@@ -249,7 +249,6 @@
             </mat-grid-tile>
         </mat-grid-list>
     </div>
-    
 </form>
 <!-- END FINAL REWARDS -->
 
@@ -300,13 +299,12 @@
                 <input matInput id="reward-note" name="editrewardField6" [(ngModel)]="rewardNote">
             </mat-form-field>
             <p *ngIf="checkDesc()" style="color: red;">Manca la descrizione</p>
-
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
                     <button mat-raised-button class="all-button" color="primary" type="submit"  [disabled]="checkDesc()" (click)="toggleSaveEditRewardPopup()">{{'saveReward' | translate}}</button>
-                    <button mat-raised-button class="all-button" color="primary" (click)="toggleSpostaPopup()" (click)="generaNuoviValori()">{{'move' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" (click)="toggleMovePopup()" (click)="generaNuoviValori()">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteRewardPopup()">{{'deleteReward' | translate}}</button>
                 </mat-grid-tile>
@@ -376,7 +374,7 @@
 </div>
 
 <!-- SPOSTA -->
-<div class="popup" *ngIf="isSpostaPopupOpen">
+<div class="popup" *ngIf="isMovePopupOpen">
     <div class="popup-content">
         <h2>Sposta il premio</h2>
         <span>Periodo:</span>
@@ -409,8 +407,8 @@
             <input matInput name="rewardFieldSposta" [(ngModel)]="selectedPrize">
         </mat-form-field>
         <br>
-        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSpostaPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="sposta()" (click)="toggleSpostaPopup()" (click)="goDefaultPage()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleMovePopup()">{{'close' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="move()" (click)="toggleMovePopup()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 <!-- END SPOSTA -->
