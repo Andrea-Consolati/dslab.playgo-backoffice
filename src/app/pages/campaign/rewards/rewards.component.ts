@@ -362,6 +362,7 @@ export class RewardsComponent implements OnInit {
   }
 
   saveEditReward() {
+    if(this.checkDesc()){
     if (this.checkWeek0()) {
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
       this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
@@ -377,6 +378,7 @@ export class RewardsComponent implements OnInit {
       this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
       this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
     }
+   }
   }
 
   deleteReward() {
@@ -432,12 +434,14 @@ export class RewardsComponent implements OnInit {
   }
 
   addReward() {
+    if(this.checkDesc()){
     this.oggettoTmp = { desc: {[this.selectedLang]: this.rewardDesc}, position: this.campaign.weekConfs[this.weekNumberTmp].rewards.length, rewardNote: {[this.selectedLang]: this.rewardNote}, sponsorDesc: {[this.selectedLang]: this.sponsorDesc}, sponsor: this.sponsorName, sponsorWebsite: this.sponsorWebsite, winner: this.nickname };
     if (this.checkWeek0()) {
       this.campaign.weekConfs[this.weekNumberTmp].rewards.push(this.oggettoTmp);
     } else {
       this.campaign.weekConfs[this.weekNumberTmp - 1].rewards.push(this.oggettoTmp);
     }
+   }
   }
 
   addPeriod() {
@@ -650,5 +654,16 @@ export class RewardsComponent implements OnInit {
   changeName(nome) {
     this.nickname = nome+" ";
     this.cercaPerNome();
+  }
+
+  checkDesc(){
+    if(this.rewardDesc.length<1){
+
+      return true;
+    }
+    else 
+    return false;
+
+
   }
 }

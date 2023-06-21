@@ -221,7 +221,7 @@
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleAddPeriodPopup()">{{'savePeriod' | translate}}</button>
+                <button mat-raised-button class="all-button" color="primary" type="submit" [disabled]="checkDate()" (click)="toggleAddPeriodPopup()">{{'savePeriod' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgrey;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
@@ -259,6 +259,7 @@
             </mat-grid-tile>
         </mat-grid-list>
     </div>
+    
 </form>
 <!-- END FINAL REWARDS -->
 
@@ -310,11 +311,13 @@
                 <mat-label>{{'rewardNote' | translate}}</mat-label>
                 <input matInput id="reward-note" name="editrewardField6" [(ngModel)]="rewardNote">
             </mat-form-field>
+            <p *ngIf="checkDesc()" style="color: red;">Manca la descrizione</p>
+
         </form>
         <div>
             <mat-grid-list cols="1" rowHeight="45px">
                 <mat-grid-tile [colspan]="1" [rowspan]="1">
-                    <button mat-raised-button class="all-button" color="primary" type="submit" (click)="toggleSaveEditRewardPopup()">{{'saveReward' | translate}}</button>
+                    <button mat-raised-button class="all-button" color="primary" type="submit"  [disabled]="checkDesc()" (click)="toggleSaveEditRewardPopup()">{{'saveReward' | translate}}</button>
                     <button mat-raised-button class="all-button" color="primary" (click)="toggleSpostaPopup()" (click)="generaNuoviValori()">{{'move' | translate}}</button>
                     <button mat-raised-button class="all-button" style="background-color: lightgray;" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
                     <button mat-raised-button class="all-button" color="warn" (click)="toggleDeleteRewardPopup()">{{'deleteReward' | translate}}</button>
@@ -372,11 +375,13 @@
             <mat-label>{{'rewardNote' | translate}}</mat-label>
             <input matInput id="reward-note" name="newRewardField6" [(ngModel)]="rewardNote">
         </mat-form-field>
+        <p *ngIf="checkDesc()" style="color: red;">Manca la descrizione</p>
+
     </form>
     <div>
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
-                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleAddRewardPopup()">{{'saveReward' | translate}}</button>
+                <button mat-raised-button type="submit" class="all-button" color="primary" [disabled]="checkDesc()" (click)="toggleAddRewardPopup()">{{'saveReward' | translate}}</button>
                 <button mat-raised-button class="all-button" style="background-color: lightgray" (click)="toggleCancelPopup()">{{'cancel' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
