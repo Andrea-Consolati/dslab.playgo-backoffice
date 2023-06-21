@@ -647,6 +647,9 @@ export class RewardsComponent implements OnInit {
 
   move() {
     this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+    if ((this.selectedPeriod = this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp)) {
+      this.indiceTmp = this.indiceTmp + 1;
+    }
     this.deleteReward();
   }
 
