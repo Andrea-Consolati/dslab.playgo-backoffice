@@ -286,10 +286,9 @@
             <mat-form-field appearance="fill" class="input-half-right">
                 <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
                 <mat-label>{{ "nickname" }}</mat-label>
-                <input matInput type="text" [(ngModel)]="filtroNome" (input)="cercaPerNome()" placeholder="Cerca per nome">
-                <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)">{{ risultato.player.nickname }}  </mat-option>
+                <input matInput type="text" [(ngModel)]="nickname" (input)="cercaPerNome()" placeholder="Cerca per nome">
+                <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)" (click)="changeName(risultato.player.nickname)">{{ risultato.player.nickname }}  </mat-option>
             </mat-form-field>
-            
             <br>
             <h3> {{'Sponsor' | translate}} </h3>
             <mat-form-field appearance="fill" class="full-width">
@@ -349,10 +348,9 @@
         <mat-form-field appearance="fill" class="input-half-right">
             <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
             <mat-label>{{ "nickname" }}</mat-label>
-            <input matInput type="text" [(ngModel)]="filtroNome" (input)="cercaPerNome()" placeholder="Cerca per nome">
+            <input matInput type="text" [(ngModel)]="nickname" (input)="cercaPerNome()" placeholder="Cerca per nome">
             <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)" (click)="changeName(risultato.player.nickname)">{{ risultato.player.nickname }}  </mat-option>
         </mat-form-field>
-        
         <br>
         <h3> {{'Sponsor' | translate}} </h3>
         <mat-form-field appearance="fill" class="full-width">
@@ -413,15 +411,18 @@
         <mat-form-field appearance="fill" class="input-half-right">
             <mat-label>{{ 'Seleziona periodo' }}</mat-label>
             <mat-select>
-                <mat-option *ngFor="let item of campaign.weekConfs[weekNumberTmp].rewards; let i = index">
+                <mat-option *ngFor="let item of campaign.weekConfs[selectedPeriod].rewards; let i = index">
                     <p (click)="selectReward(i + 1)">{{ i + 1 }}</p>
+                </mat-option>
+                <mat-option>
+                    <p (click)="selectReward(campaign.weekConfs[selectedPeriod].rewards.length + 1)"> Sposta in ultima posizione </p>
                 </mat-option>
             </mat-select>
             <input matInput name="rewardFieldSposta" [(ngModel)]="selectedPrize">
         </mat-form-field>
         <br>
         <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSpostaPopup()">{{'close' | translate}}</button>
-        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="sposta()" (click)="toggleSpostaPopup()">{{'save' | translate}}</button>
+        <button mat-raised-button type="submit" class="all-button" color="primary" (click)="sposta()" (click)="toggleSpostaPopup()" (click)="goDefaultPage()">{{'save' | translate}}</button>
     </div>
 </div>
 <!-- END SPOSTA -->
@@ -552,8 +553,3 @@
 
 
 <!-- IN PROGRESS -->
-
-
-
-
-

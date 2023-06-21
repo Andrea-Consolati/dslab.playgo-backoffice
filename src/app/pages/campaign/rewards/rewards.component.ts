@@ -14,15 +14,6 @@ import { PlayerCampaignClass } from "src/app/shared/classes/player-campaing-clas
 import { SnackbarSavedComponent } from "src/app/shared/components/snackbar-saved/snackbar-saved.component";
 import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constants";
 
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-
-
-interface Elemento {
-  nome: string;
-  // ... altre proprietà ...
-}
-
 @Component({
   selector: "app-rewards",
   templateUrl: "./rewards.component.html",
@@ -30,11 +21,6 @@ interface Elemento {
 })
 
 export class RewardsComponent implements OnInit {
-
-
-
-
-
   selectedLang: string = "it";
   campaign: CampaignClass;
   dataSource: MatTableDataSource<any>;
@@ -46,7 +32,6 @@ export class RewardsComponent implements OnInit {
   rewardCsv: any;
   territorySelected: any;
   i: any;
-  l = 1;
   viewEditPeriod: boolean = false;
   viewEditRewards: boolean = false;
   viewNewPeriod: boolean = false;
@@ -87,12 +72,8 @@ export class RewardsComponent implements OnInit {
   listUserCampaign: PlayerCampaignClass[];
   pageSizesOnTable:20;
   territoryId: string;
-  
-
+  risultatiFiltrati = [];
   myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]>;
-
 
   constructor(
     public dialogRef: MatDialogRef<RewardsComponent>,
@@ -109,13 +90,6 @@ export class RewardsComponent implements OnInit {
       weeks: new FormControl("", [Validators.required]),
       rewards: new FormControl("", [Validators.required]),
     });
-
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value)),
-      )
-
-
     this.validatingForm.patchValue({
       defaultSurvey: "-",
     });
@@ -414,18 +388,18 @@ export class RewardsComponent implements OnInit {
   }
 
   deletePeriod() {
-      if (!this.checkWeek0()) {
+      if (this.checkWeek0()) {
        this.campaign.weekConfs.splice(this.weekNumberTmp, 1);
       } else {
         this.campaign.weekConfs.splice(this.weekNumberTmp - 1, 1);
       }
+      this.setTableData();
       this.ripristinaOrdinamentoPeriodi();
-      this.reloadAllWeeks();
   }
 
   deleteFinalRewards() {
     this.campaign.weekConfs.splice(0, 1);
-    this.reloadAllWeeks();
+    this.setTableData();
   }
 
   ripristinaOrdinamentoPeriodi() {
@@ -471,7 +445,7 @@ export class RewardsComponent implements OnInit {
       var newVoidRewardsArray: Array<CampaignReward> = [];
       var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
       this.campaign.weekConfs.push(newPeriod);
-      this.reloadAllWeeks();
+      this.setTableData();
     }
   }
 
@@ -479,7 +453,7 @@ export class RewardsComponent implements OnInit {
     var newVoidRewardsArray: Array<CampaignReward> = [];
     var newFinalRewards: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.campaign.dateFrom, dateTo: this.campaign.dateTo, rewards: newVoidRewardsArray, weekNumber: 0, desc: {[this.selectedLang]: this.finalRewardsNote} };
     this.campaign.weekConfs.unshift(newFinalRewards);
-    this.reloadAllWeeks();
+    this.setTableData();
   }
 
   saveFinalRewards() {
@@ -513,10 +487,6 @@ export class RewardsComponent implements OnInit {
     } else {
       this.selectedLang = "it";
     }
-  }
-
-  reloadAllWeeks() {
-    this.dataSource = new MatTableDataSource<any>(this.campaign.weekConfs);
   }
 
   clearValue() {
@@ -609,7 +579,7 @@ export class RewardsComponent implements OnInit {
   }
 
   sposta() {
-    this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 2, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+    this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
     this.deleteReward();
   }
 
@@ -671,30 +641,14 @@ export class RewardsComponent implements OnInit {
     this.indiceTmp = indice;
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
- 
-
-
-
-  filtroNome: string = '';
-  risultatiFiltrati=[] ;
-
   cercaPerNome() {
     this.risultatiFiltrati = this.listUserCampaign.filter(elemento =>
-      elemento.player.nickname.toLowerCase().includes(this.filtroNome.toLowerCase())
+      elemento.player.nickname.toLowerCase().includes(this.nickname.toLowerCase())
     );
   }
 
-  changeName(nome){
-
-    this.filtroNome=nome+" ";
-
+  changeName(nome) {
+    this.nickname = nome+" ";
     this.cercaPerNome();
-
   }
-
 }
