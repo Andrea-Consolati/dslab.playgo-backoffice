@@ -417,6 +417,7 @@ export class RewardsComponent implements OnInit {
     if (!this.checkDate()) {
       var newVoidRewardsArray: Array<CampaignReward> = [];
       var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
+      this.oggettoTmp = newPeriod;
       this.campaign.weekConfs.push(newPeriod);
       this.setTableData();
       this.ripristinaOrdinamentoPeriodi();
@@ -649,12 +650,21 @@ export class RewardsComponent implements OnInit {
   }
 
   move() {
-    this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
-    if ((this.selectedPeriod = this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp)) {
-      this.indiceTmp = this.indiceTmp + 1;
+    if (this.checkWeek0) {
+      this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+      if ((this.selectedPeriod = this.weekNumberTmp - 1) && (this.selectedPrize < this.indiceTmp)) {
+        this.indiceTmp = this.indiceTmp + 1;
+      }
+      this.deleteReward();
+    } else {
+      this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+      if ((this.selectedPeriod = this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp)) {
+        this.indiceTmp = this.indiceTmp + 1;
+      }
+      this.deleteReward();
     }
-    this.deleteReward();
   }
+    
 
   generaNuoviValori() {
     this.selectedPeriod = this.weekNumberTmp;
