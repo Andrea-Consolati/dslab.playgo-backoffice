@@ -22,7 +22,7 @@ import { TERRITORY_ID_LOCAL_STORAGE_KEY } from "src/app/shared/constants/constan
 
 export class RewardsComponent implements OnInit {
 //VARIABILI
-  selectedLang: string = "it";
+  selectedLang: string;
   campaign: CampaignClass;
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ["index-dates"];
@@ -380,19 +380,19 @@ export class RewardsComponent implements OnInit {
   saveEditReward() {
     if (!this.checkDesc()) {
       if (this.checkWeek0()) {
-        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc = {[this.selectedLang]: this.rewardDesc};
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
         this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
         this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
-        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc = {[this.selectedLang]: this.sponsorDesc};
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
         this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote = {[this.selectedLang]: this.rewardNote};
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
       } else {
-        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc = {[this.selectedLang]: this.rewardDesc};
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
         this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
         this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
-        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc = {[this.selectedLang]: this.sponsorDesc};
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
         this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote = {[this.selectedLang]: this.rewardNote};
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
       }
     }
   }
@@ -581,6 +581,8 @@ export class RewardsComponent implements OnInit {
       if (this.rewardDesc.length < 1) {
         return true;
       }
+    } else {
+      return true;
     }
     return false;
   }
