@@ -650,19 +650,18 @@ export class RewardsComponent implements OnInit {
   }
 
   move() {
-    if (this.checkWeek0) {
-      this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
-      if ((this.selectedPeriod = this.weekNumberTmp - 1) && (this.selectedPrize < this.indiceTmp)) {
-        this.indiceTmp = this.indiceTmp + 1;
-      }
-      this.deleteReward();
-    } else {
+    if (this.checkWeek0()) { //si settimana 0
       this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
-      if ((this.selectedPeriod = this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp)) {
+      if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize - 1 < this.indiceTmp)) {
         this.indiceTmp = this.indiceTmp + 1;
       }
-      this.deleteReward();
+    } else { //no settimana 0
+      this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp + 1]);
+      if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp)) {
+        this.indiceTmp = this.indiceTmp + 1;
+      }
     }
+    this.deleteReward();
   }
     
 
