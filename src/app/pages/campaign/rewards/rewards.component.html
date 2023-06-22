@@ -2,7 +2,7 @@
 <div class="header-bar-stick">
     <mat-grid-list cols="8" rowHeight="45px">
         <mat-grid-tile [colspan]="6" [rowspan]="2">
-            <h1 class="full-width">{{'weeklyPrizes'| translate}}</h1>
+            <h1 class="full-width" style="font-weight: bold;">{{'weeklyPrizes'| translate}}</h1>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="2" [rowspan]="2">
             <button mat-raised-button class="all-button" color="primary" (click)="switchLoadCSV()">
@@ -275,7 +275,7 @@
                 <mat-icon matSuffix style="cursor: pointer" (click)="clearNickname()">close</mat-icon>
                 <mat-label>{{ "nickname" }}</mat-label>
                 <input matInput type="text" [(ngModel)]="nickname" (input)="cercaPerNome()" placeholder="Cerca per nome">
-                <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)" (click)="changeName(risultato.player.nickname)">{{ risultato.player.nickname }}  </mat-option>
+                <mat-option *ngFor="let risultato of risultatiFiltrati.slice(0,3)" (click)="changeName(risultato.player.nickname)">{{ risultato.player.nickname }}</mat-option>
             </mat-form-field>
             <br>
             <h3> {{'Sponsor' | translate}} </h3>
@@ -395,7 +395,7 @@
         <br>
         <span>Sposta prima del premio:</span>
         <mat-form-field appearance="fill" class="input-half-right">
-            <mat-label>{{ 'Seleziona periodo' }}</mat-label>
+            <mat-label>{{ 'Seleziona posizione' }}</mat-label>
             <mat-select>
                 <mat-option *ngFor="let item of campaign.weekConfs[selectedPeriod].rewards; let i = index">
                     <p (click)="selectReward(i + 1)">{{ i + 1 }}</p>
@@ -564,7 +564,7 @@
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
                 <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup4()">{{'close' | translate}}</button>
-                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup4()" (click)="saveEditReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, indiceTmp-1)">{{'save' | translate}}</button>
+                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup4()" (click)="saveEditReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, indiceTmp)">{{'save' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>

@@ -291,7 +291,6 @@ export class RewardsComponent implements OnInit {
 
 //GESTIONE VISUALIZZAZIONE PAGINE
   goFinalRewards() {
-    this.clearValue();
     this.viewFinalRewards = true;
     this.viewEditPeriod=false;
     this.viewEditRewards=false;
@@ -315,7 +314,6 @@ export class RewardsComponent implements OnInit {
   }
 
   goEditReward(oggetto, weekNumber, indice) {
-    this.clearValue();
     this.viewEditRewards=false;
     this.viewEditPeriod=false;
     this.viewEditRewards=true;
@@ -382,19 +380,19 @@ export class RewardsComponent implements OnInit {
   saveEditReward() {
     if (!this.checkDesc()) {
       if (this.checkWeek0()) {
-        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].desc = {[this.selectedLang]: this.rewardDesc};
         this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].winner = this.nickname;
         this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsor = this.sponsorName;
-        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorDesc = {[this.selectedLang]: this.sponsorDesc};
         this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+        this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp].rewardNote = {[this.selectedLang]: this.rewardNote};
       } else {
-        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc[this.selectedLang] = this.rewardDesc;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].desc = {[this.selectedLang]: this.rewardDesc};
         this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].winner = this.nickname;
         this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsor = this.sponsorName;
-        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc[this.selectedLang] = this.sponsorDesc;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorDesc = {[this.selectedLang]: this.sponsorDesc};
         this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].sponsorWebsite = this.sponsorWebsite;
-        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote[this.selectedLang] = this.rewardNote;
+        this.campaign.weekConfs[this.weekNumberTmp - 1].rewards[this.indiceTmp].rewardNote = {[this.selectedLang]: this.rewardNote};
       }
     }
   }
@@ -421,6 +419,7 @@ export class RewardsComponent implements OnInit {
       var newPeriod: CampaignWeekConf = { campaignId: this.campaign.campaignId, dateFrom: this.fromDateTimeToLong(this.dateFrom), dateTo: this.fromDateTimeToLong(this.dateTo), rewards: newVoidRewardsArray, weekNumber: this.campaign.weekConfs.length, desc: {[this.selectedLang]: this.periodNote} };
       this.campaign.weekConfs.push(newPeriod);
       this.setTableData();
+      this.ripristinaOrdinamentoPeriodi();
     }
   }
 
@@ -539,7 +538,7 @@ export class RewardsComponent implements OnInit {
   }
 
   checkDate(): boolean {
-    if (this.dateTo < this.dateFrom) {
+    if ((this.dateTo < this.dateFrom) || (this.dateTo == "") || (this.dateFrom == "")) {
       return true;
     }
     return false;
@@ -578,8 +577,10 @@ export class RewardsComponent implements OnInit {
   }
 
   checkDesc() {
-    if (this.rewardDesc.length<1) {
-      return true;
+    if (this.rewardDesc != undefined) {
+      if (this.rewardDesc.length < 1) {
+        return true;
+      }
     }
     return false;
   }
