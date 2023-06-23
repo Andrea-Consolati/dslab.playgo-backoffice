@@ -655,13 +655,20 @@ export class RewardsComponent implements OnInit {
       if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize - 1 < this.indiceTmp)) {
         this.indiceTmp = this.indiceTmp + 1;
       }
+      this.deleteReward();
     } else { //no settimana 0
-      this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp + 1]);
-      if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp)) {
-        this.indiceTmp = this.indiceTmp + 1;
+      if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp+1)) {
+        //this.isSaveEditRewardPopupOpen=true
+        this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp-1].rewards[this.indiceTmp]);
+        this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.indiceTmp+1, 1);
+        
+      }else{
+  
+        this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+        this.deleteReward();
       }
     }
-    this.deleteReward();
+    
   }
     
 
