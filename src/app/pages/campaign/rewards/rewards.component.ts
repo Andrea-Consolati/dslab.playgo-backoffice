@@ -663,8 +663,14 @@ export class RewardsComponent implements OnInit {
         this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.indiceTmp+1, 1);
         
       }else{
+        if(this.selectedPeriod==this.weekNumberTmp){
   
-        this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+        this.campaign.weekConfs[this.selectedPeriod-1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+        
+        }else{
+          this.campaign.weekConfs[this.selectedPeriod-1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp-1].rewards[this.indiceTmp]);
+          
+        }
         this.deleteReward();
       }
     }
