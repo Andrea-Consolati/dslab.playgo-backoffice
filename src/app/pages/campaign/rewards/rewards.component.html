@@ -584,7 +584,7 @@
         <mat-grid-list cols="1" rowHeight="45px">
             <mat-grid-tile [colspan]="1" [rowspan]="1">
                 <button mat-raised-button type="submit" class="all-button" style="background-color: lightgray" (click)="toggleSaveAndChangeLanguagePopup5()">{{'close' | translate}}</button>
-                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup5()" (click)="addReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, campaign.weekConfs[weekNumberTmp].rewards.length)">{{'save' | translate}}</button>
+                <button mat-raised-button type="submit" class="all-button" color="primary" (click)="toggleSaveAndChangeLanguagePopup5()" (click)="addReward()" (click)="switchLanguage()" (click)="goEditReward(oggettoTmp, weekNumberTmp, campaign.weekConfs[weekNumberTmp].rewards.length-1)">{{'save' | translate}}</button>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
