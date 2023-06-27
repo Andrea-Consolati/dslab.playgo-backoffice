@@ -650,33 +650,27 @@ export class RewardsComponent implements OnInit {
   }
 
   move() {
-    if (this.checkWeek0()) { //si settimana 0
+    if (this.checkWeek0()) {
       this.campaign.weekConfs[this.selectedPeriod].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
       if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize - 1 < this.indiceTmp)) {
         this.indiceTmp = this.indiceTmp + 1;
       }
       this.deleteReward();
-    } else { //no settimana 0
+    } else {
       if ((this.selectedPeriod == this.weekNumberTmp) && (this.selectedPrize < this.indiceTmp+1)) {
-        //this.isSaveEditRewardPopupOpen=true
         this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp-1].rewards[this.indiceTmp]);
         this.campaign.weekConfs[this.selectedPeriod - 1].rewards.splice(this.indiceTmp+1, 1);
         
-      }else{
-        if(this.selectedPeriod==this.weekNumberTmp){
-  
-        this.campaign.weekConfs[this.selectedPeriod-1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
-        
-        }else{
+      } else {
+        if (this.selectedPeriod==this.weekNumberTmp) {
+          this.campaign.weekConfs[this.selectedPeriod-1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp].rewards[this.indiceTmp]);
+        } else{ 
           this.campaign.weekConfs[this.selectedPeriod-1].rewards.splice(this.selectedPrize - 1, 0, this.campaign.weekConfs[this.weekNumberTmp-1].rewards[this.indiceTmp]);
-          
         }
         this.deleteReward();
       }
     }
-    
   }
-    
 
   generaNuoviValori() {
     this.selectedPeriod = this.weekNumberTmp;
